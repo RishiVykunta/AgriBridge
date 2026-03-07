@@ -127,7 +127,7 @@ export function CategoriesSection() {
               }}
               className="group relative overflow-hidden rounded-xl border border-zinc-200 hover:border-emerald-400 hover:shadow-lg transition duration-300"
             >
-              <div className="relative h-44 w-full">
+              <div className="relative h-32 sm:h-44 w-full">
                 <img
                   src={cat.image}
                   alt={cat.label}
@@ -135,8 +135,8 @@ export function CategoriesSection() {
                 />
 
                 {/* Gradient Overlay */}
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-center pb-3">
-                  <span className="text-sm font-semibold text-white tracking-wide text-center px-2">
+                <div className="absolute inset-x-0 bottom-0 h-1/2 sm:h-1/3 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-center pb-2 sm:pb-3">
+                  <span className="text-xs sm:text-sm font-semibold text-white tracking-wide text-center px-1 sm:px-2 leading-tight">
                     {cat.label}
                   </span>
                 </div>

@@ -62,23 +62,24 @@ export default function ProductSection({
           </Link>
         </div>
 
-        <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
+        <div className="mt-6 flex gap-3 sm:gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
           {products.map((p) => (
-            <ProductCard
-              key={p.productId ?? p.name}
-              name={p.name}
-              brand={p.brand}
-              prices={p.prices}
-              cutPrice={p.cutPrice}
-              save={p.save}
-              discount={p.discount}
-              image={p.image}
-              availability={p.availability}
-              description={p.description}
-              href={p.href}
-              productId={p.productId}
-              isLoggedIn={isLoggedIn}
-            />
+            <div key={p.productId ?? p.name} className="snap-start shrink-0">
+              <ProductCard
+                name={p.name}
+                brand={p.brand}
+                prices={p.prices}
+                cutPrice={p.cutPrice}
+                save={p.save}
+                discount={p.discount}
+                image={p.image}
+                availability={p.availability}
+                description={p.description}
+                href={p.href}
+                productId={p.productId}
+                isLoggedIn={isLoggedIn}
+              />
+            </div>
           ))}
         </div>
       </div>

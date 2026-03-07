@@ -170,13 +170,12 @@ export function ProductCard({
 
   return (
     <article
-      className="group flex w-56 shrink-0 flex-col rounded-xl border border-zinc-200 bg-white overflow-hidden 
+      className="group flex w-44 sm:w-56 shrink-0 flex-col rounded-xl border border-zinc-200 bg-white overflow-hidden 
       transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:border-emerald-500"
     >
       {/* IMAGE SECTION */}
       <div
-        className="relative bg-zinc-100 overflow-hidden"
-        style={{ height: "240px" }}
+        className="relative bg-zinc-100 overflow-hidden h-[180px] sm:h-[240px]"
       >
         <Link href={href} className="block h-full">
           {/* OFFER BADGE */}
@@ -218,7 +217,7 @@ export function ProductCard({
 
       {/* CONTENT */}
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="line-clamp-2 text-sm font-medium text-zinc-900">
+        <h3 className="line-clamp-2 text-xs sm:text-sm font-medium text-zinc-900 leading-snug sm:leading-normal">
           {name}
         </h3>
 
@@ -234,7 +233,7 @@ export function ProductCard({
         {/* PRICE SECTION */}
         <div className="mt-3 space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-zinc-900">
+            <span className="text-base sm:text-lg font-semibold text-zinc-900">
               ₹{selectedPrice.price}
             </span>
 
