@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AgriBridge
 
-## Getting Started
+AgriBridge is an e-commerce and community platform tailored for the agricultural sector. It connects farmers, retailers, and agricultural brands to facilitate the buying and selling of seeds, crop protection, crop nutrition, equipment, and services. 
 
-First, run the development server:
+## 🚀 Technologies Used
+- **Frontend & Backend**: [Next.js 16](https://nextjs.org/) (App Router, Server Actions)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Database**: [PostgreSQL](https://www.postgresql.org/) (hosted on Neon)
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Authentication**: JWT & bcryptjs based custom authentication
+- **Icons**: Lucide React
 
+## 📦 Features
+- Role-based user dashboards (Admin, Farmer, Retailer, Consumer).
+- Extensive product catalog spanning multiple categories (Seeds, Horticulture, Animal Husbandry).
+- Fully functional shopping cart and wishlist system.
+- Secure, token-based authentication.
+
+## 🛠️ Local Setup Instructions
+
+### 1. Prerequisites
+- Node.js (v18 or higher recommended)
+- A PostgreSQL database string (e.g., from Neon, Supabase, or a local instance)
+
+### 2. Clone the Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/RishiVykunta/AgriBridge.git
+cd AgriBridge
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Install Dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Configure Environment Variables
+Create a `.env` file in the root of the project with the following minimum required variables.
+```env
+# Database connection string
+DATABASE_URL="postgres://user:password@host:port/database"
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Secret Key for JWT token generation
+JWT_SECRET="your-super-secret-key"
+```
 
-## Learn More
+### 5. Setup the Database
+Run the following Prisma commands to sync your database schema, apply migrations, and optionally seed it with default data.
+```bash
+# Generate Prisma Client
+npm run db:generate
 
-To learn more about Next.js, take a look at the following resources:
+# Push schema to database
+npm run db:push
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Run seed data (optional, to populate initial products/users)
+npm run db:seed
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 6. Start the Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Deploy on Vercel
+## 📝 Scripts Breakdown
+- `npm run dev`: Starts the Next.js development server.
+- `npm run build`: Creates an optimized production build.
+- `npm run start`: Starts the production server.
+- `npm run lint`: Runs ESLint to check for code issues.
+- `npm run db:studio`: Opens Prisma Studio to view database contents visually.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+Built with ❤️ for agriculture.

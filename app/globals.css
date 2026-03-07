@@ -1,16 +1,25 @@
 @import "tailwindcss";
 
+/* ===================================================== */
+/* ================= ROOT THEME ======================== */
+/* ===================================================== */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
+/* Tailwind inline theme mapping */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
+
+/* ===================================================== */
+/* ================= DARK MODE ========================= */
+/* ===================================================== */
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -19,8 +28,81 @@
   }
 }
 
+/* ===================================================== */
+/* ================= BASE STYLES ======================= */
+/* ===================================================== */
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ===================================================== */
+/* ========== AMAZON STYLE BRAND CAROUSEL ============= */
+/* ===================================================== */
+
+/* Infinite smooth scroll (Right → Left like Amazon) */
+@keyframes amazonScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-amazon {
+  animation: amazonScroll 20s linear infinite;
+}
+
+.animate-amazon:hover {
+  animation-play-state: paused;
+}
+/* ================= PROMO MARQUEE (HOME BANNER) ================= */
+/* Smooth marquee-style scroll for promo banner */
+
+@keyframes promoScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@layer utilities {
+  .animate-promo {
+    animation: promoScroll 25s linear infinite;
+    will-change: transform;
+  }
+}
+
+/* Generic marquee animation for home promo bar */
+@keyframes homeMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: homeMarquee 25s linear infinite;
 }
