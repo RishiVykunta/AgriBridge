@@ -170,17 +170,17 @@ export function ProductCard({
 
   return (
     <article
-      className="group flex w-44 sm:w-56 shrink-0 flex-col rounded-xl border border-zinc-200 bg-white overflow-hidden 
-      transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:border-emerald-500"
+      className="group flex w-44 sm:w-full flex-col rounded-[32px] border border-zinc-200 bg-white overflow-hidden 
+      transition-all duration-500 hover:shadow-2xl hover:border-emerald-500/50 hover:-translate-y-1.5"
     >
       {/* IMAGE SECTION */}
       <div
-        className="relative bg-zinc-100 overflow-hidden h-[180px] sm:h-[240px]"
+        className="relative bg-zinc-100 overflow-hidden h-[180px] sm:h-[260px]"
       >
         <Link href={href} className="block h-full">
           {/* OFFER BADGE */}
           {discount && (
-            <span className="absolute left-3 top-3 z-20 rounded bg-red-500 px-3 py-1 text-xs font-semibold text-white shadow">
+            <span className="absolute left-4 top-4 z-20 rounded-full bg-red-600 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-red-500/20">
               {discount}
             </span>
           )}
@@ -190,10 +190,10 @@ export function ProductCard({
             <img
               src={image}
               alt={name}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-4xl text-zinc-300">
+            <div className="flex h-full items-center justify-center text-4xl text-zinc-300 bg-zinc-50">
               📦
             </div>
           )}
@@ -204,102 +204,78 @@ export function ProductCard({
           type="button"
           onClick={handleWishlistToggle}
           disabled={isOutOfStock || isPending}
-          className={`absolute right-3 top-3 rounded-full border p-2 shadow transition-all duration-200 ${
+          className={`absolute right-4 top-4 rounded-full border p-2.5 shadow-xl transition-all duration-300 ${
             inWishlist
-              ? "bg-red-500 border-red-500 text-white hover:bg-red-600"
-              : "bg-white border-zinc-200 text-zinc-700 hover:bg-red-50 hover:text-red-500"
-          } disabled:opacity-60`}
+              ? "bg-red-500 border-red-500 text-white hover:bg-red-600 scale-110"
+              : "bg-white/80 backdrop-blur-md border-white/50 text-zinc-700 hover:bg-red-50 hover:text-red-500"
+          } disabled:opacity-60 z-20`}
           aria-label="Toggle wishlist"
         >
-          {inWishlist ? "♥" : "♡"}
+          {inWishlist ? (
+             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          ) : (
+             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          )}
         </button>
+        
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
       {/* CONTENT */}
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="line-clamp-2 text-xs sm:text-sm font-medium text-zinc-900 leading-snug sm:leading-normal">
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex items-center gap-2 mb-2">
+           <span className="text-[10px] font-black uppercase tracking-tighter text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+             {brand}
+           </span>
+           {isOutOfStock && (
+             <span className="text-[10px] font-black uppercase tracking-tighter text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100 ml-auto">
+               Sold Out
+             </span>
+           )}
+        </div>
+
+        <h3 className="line-clamp-2 text-sm font-bold text-zinc-900 leading-tight mb-2 group-hover:text-emerald-700 transition-colors">
           {name}
         </h3>
 
-        <p className="mt-1 text-xs text-zinc-500">{brand}</p>
-
-        {/* DESCRIPTION */}
-        {description && (
-          <p className="mt-2 text-xs text-zinc-600 line-clamp-3">
-            {description}
-          </p>
-        )}
-
         {/* PRICE SECTION */}
-        <div className="mt-3 space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="text-base sm:text-lg font-semibold text-zinc-900">
+        <div className="mt-auto pt-4 border-t border-zinc-100">
+          <div className="flex items-baseline gap-2 mb-3">
+            <span className="text-xl font-black text-zinc-900 tracking-tight">
               ₹{selectedPrice.price}
             </span>
 
             {cutPrice && (
-              <span className="text-sm text-zinc-400 line-through">
+              <span className="text-xs text-zinc-400 line-through font-medium">
                 ₹{cutPrice}
-              </span>
-            )}
-
-            {discount && (
-              <span className="text-sm font-medium text-emerald-600">
-                {discount}
               </span>
             )}
           </div>
 
-          {save && (
-            <p className="text-xs text-emerald-600">
-              Save ₹{save}
-            </p>
-          )}
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => handleAddToCart()}
+              className="flex-1 rounded-2xl bg-zinc-900 text-white py-2.5 text-xs font-bold uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-zinc-900/10 disabled:bg-zinc-200 disabled:shadow-none"
+              disabled={isOutOfStock || isPending}
+            >
+              Add
+            </button>
+            <button
+              type="button"
+              title="Buy Now"
+              onClick={() => handleAddToCart({ buyNow: true })}
+              className="rounded-2xl border border-zinc-200 p-2.5 hover:border-emerald-500 hover:text-emerald-600 transition-all disabled:opacity-50"
+              disabled={isOutOfStock || isPending}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            </button>
+          </div>
         </div>
 
-        {/* SIZE SELECT (static display – first option) */}
-        <div className="mt-3">
-          <select
-            className="w-full rounded border border-zinc-300 px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-            defaultValue={selectedPrice.label}
-          >
-            {prices.map((p) => (
-              <option key={p.label} value={p.label}>
-                {p.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {availability === "out_of_stock" && (
-          <p className="mt-2 text-xs text-red-600">
-            Currently Unavailable
-          </p>
-        )}
-
-        {/* ACTION BUTTONS */}
-        <div className="mt-4 flex gap-2">
-          <button
-            type="button"
-            onClick={() => handleAddToCart()}
-            className="flex-1 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:bg-zinc-300"
-            disabled={isOutOfStock || isPending}
-          >
-            Add to Cart
-          </button>
-          <button
-            type="button"
-            onClick={() => handleAddToCart({ buyNow: true })}
-            className="flex-1 rounded-lg border border-emerald-600 px-3 py-2 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-50 disabled:border-zinc-300 disabled:text-zinc-400"
-            disabled={isOutOfStock || isPending}
-          >
-            Buy Now
-          </button>
-        </div>
-
-        {/* Lightweight toast */}
+        {/* Action feedback */}
         {toast && (
-          <div className="mt-2 rounded bg-emerald-50 px-2 py-1 text-[11px] text-emerald-700">
+          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 bg-zinc-900 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-2xl z-50">
             {toast}
           </div>
         )}

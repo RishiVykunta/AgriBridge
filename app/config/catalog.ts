@@ -223,6 +223,30 @@ export const MEGA_MENU_CONFIG: Record<string, MegaMenuColumn[]> = {
   ],
 };
 
+export type CategoryMetadata = {
+  heroImage?: string;
+  description?: string;
+};
+
+export const CATEGORY_METADATA: Record<string, Record<string, CategoryMetadata>> = {
+  "Crop Nutrition": {
+    "All Crop Nutrition": {
+      heroImage: "https://res.cloudinary.com/dqcxekzxn/image/upload/v1773167382/liquid_fertilizers_hero_premium_1773168064329_snbmxh.jpg",
+      description: "Optimize your crop yields with our professional range of fertilizers, growth promoters, and soil health solutions.",
+    },
+    "Liquid Fertilizers": {
+      heroImage: "https://res.cloudinary.com/dqcxekzxn/image/upload/v1773167382/liquid_fertilizers_hero_premium_1773168064329_snbmxh.jpg",
+      description: "Highly efficient, fast-acting liquid nutrition for immediate crop uptake and superior results in all weather conditions.",
+    },
+    "Chemical Fertilizers": {
+      description: "Standardized nutrient sources designed for maximum efficiency and predictable agricultural outcomes.",
+    },
+    "Bio/Organic Fertilizers": {
+      description: "Sustainable, earth-friendly nutrition that builds soil health and long-term farm productivity.",
+    }
+  }
+};
+
 export const CATEGORY_BASE_PATH: Record<string, string> = {
   Seeds: "/seeds",
   "Crop Protection": "/crop-protection",

@@ -247,6 +247,18 @@ export function HomeHeader({ session }: HomeHeaderProps) {
                     </button>
                   )}
 
+                  {/* Admin dashboard button */}
+                  {isAdmin && (
+                    <button
+                      type="button"
+                      onClick={() => router.push("/dashboard/admin")}
+                      className="hidden md:flex items-center gap-1.5 rounded-md border border-emerald-600 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100 transition-colors"
+                    >
+                      <Truck size={16} />
+                      <span>Admin Dashboard</span>
+                    </button>
+                  )}
+
                   {/* Account / Switch role for non-admins only */}
                   {!isAdmin && (
                     <button
@@ -452,11 +464,11 @@ export function HomeHeader({ session }: HomeHeaderProps) {
             <nav className="flex-1 px-4 py-4 space-y-4">
               <div className="space-y-1 border-b pb-4">
                 <Link 
-                  href={isLoggedIn ? "/dashboard" : "/login"}
+                  href={isLoggedIn ? (isAdmin ? "/dashboard/admin" : "/dashboard") : "/login"}
                   className="block px-3 py-2 rounded-md hover:bg-zinc-50 text-base font-medium text-zinc-900"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  My Account
+                  {isAdmin ? "Admin Dashboard" : "My Account"}
                 </Link>
                 <Link 
                   href={isLoggedIn ? "/wishlist" : "/login"}

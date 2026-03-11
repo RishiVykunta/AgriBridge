@@ -3,6 +3,7 @@ import {
   MEGA_MENU_CONFIG,
   formatLabelFromSlug,
   getCategoryHref,
+  CATEGORY_METADATA,
 } from "@/app/config/catalog";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
@@ -46,6 +47,8 @@ export default async function CropNutritionCategoryPage({ params }: Props) {
   const products = rows.map((p) => productToUiProduct(p));
   const brands = BRANDS.map((b) => b.name);
 
+  const metadata = CATEGORY_METADATA["Crop Nutrition"]?.[categoryLabel || "All Crop Nutrition"] || {};
+
   return (
     <CategoryListingLayout
       sectionLabel="Crop Nutrition"
@@ -54,6 +57,8 @@ export default async function CropNutritionCategoryPage({ params }: Props) {
       products={products}
       isLoggedIn={isLoggedIn}
       brands={brands}
+      heroImage={metadata.heroImage}
+      description={metadata.description}
     />
   );
 }

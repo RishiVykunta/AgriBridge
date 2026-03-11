@@ -84,12 +84,12 @@ export async function login(formData: FormData): Promise<never> {
     include: { roles: true },
   });
   if (!user) {
-    redirect("/login?error=" + encodeURIComponent("Invalid email or password."));
+    redirect("/login?error=" + encodeURIComponent("Account not found. Please check your email or signup."));
   }
 
   const valid = await verifyPassword(password, user.password);
   if (!valid) {
-    redirect("/login?error=" + encodeURIComponent("Invalid email or password."));
+    redirect("/login?error=" + encodeURIComponent("Incorrect password. If you forgot it, please ask an admin to reset it."));
   }
 
   const rolesPayload = rolesToPayload(user.roles);
@@ -326,4 +326,31 @@ export async function rejectRole(
   await prisma.userRole.delete({ where: { id: userRoleId } });
 
   redirect("/dashboard/admin/roles?message=" + encodeURIComponent("Role request rejected."));
+}
+
+/** Admin: Reset a user's password */
+export async function resetUserPassword(formData: FormData): Promise<never> {
+  const session = await (await import("@/lib/auth")).getSession();
+  if (!session) redirect("/login");
+  const { hasRole } = await import("@/lib/auth");
+  if (!hasRole(session, "ADMIN")) redirect("/dashboard");
+
+  const userId = formData.get("userId") as string;
+  const newPassword = formData.get("newPassword") as string;
+
+  if (!userId || !newPassword) {
+    redirect(`/dashboard/admin/users/${userId}?error=` + encodeURIComponent("Password is required."));
+  }
+
+  if (newPassword.length < 8) {
+    redirect(`/dashboard/admin/users/${userId}?error=` + encodeURIComponent("Password must be at least 8 characters."));
+  }
+
+  const hashed = await hashPassword(newPassword);
+  await prisma.user.update({
+    where: { id: userId },
+    data: { password: hashed },
+  });
+
+  redirect(`/dashboard/admin/users/${userId}?message=` + encodeURIComponent("Password reset successfully."));
 }
