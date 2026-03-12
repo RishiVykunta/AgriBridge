@@ -10,7 +10,7 @@ import {
   setSessionCookie,
   getSession,
 } from "@/lib/auth";
-import { Role, VerificationStatus } from "@prisma/client";
+import { Role, VerificationStatus, EmailVerificationToken } from "@prisma/client";
 import { sendResetEmail } from "@/lib/email";
 
 function rolesToPayload(roles: { role: Role; status: VerificationStatus }[]) {
@@ -32,11 +32,22 @@ export async function signup(formData: FormData): Promise<never> {
   const name = (formData.get("name") as string)?.trim();
   const phone = (formData.get("phone") as string)?.trim() || null;
 
-  if (!email || !password) {
-    redirect("/signup?error=" + encodeURIComponent("Email and password are required."));
+  // 1. STRICTOR VALIDATION
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) {
+    redirect("/signup?error=" + encodeURIComponent("Please enter a valid email address."));
   }
-  if (password.length < 8) {
-    redirect("/signup?error=" + encodeURIComponent("Password must be at least 8 characters."));
+
+  // Password Requirement: 8+ chars, Upper, Lower, Number, Special
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  if (!password || !passwordRegex.test(password)) {
+    redirect("/signup?error=" + encodeURIComponent("Password must be 8+ characters and contain uppercase, lowercase, number, and special character."));
+  }
+
+  // Indian Phone: Starts with 6-9, 10 digits
+  const phoneRegex = /^[6-9]\d{9}$/;
+  if (!phone || !phoneRegex.test(phone)) {
+    redirect("/signup?error=" + encodeURIComponent("Please enter a valid 10-digit Indian mobile number."));
   }
 
   const existing = await prisma.user.findUnique({ where: { email } });
@@ -51,10 +62,27 @@ export async function signup(formData: FormData): Promise<never> {
       password: hashed,
       name: name || null,
       phone: phone || null,
+      emailVerified: false, // New users start as unverified
     },
   });
 
-  // One user → multiple roles: assign CONSUMER as first role (auto-approved)
+  // 2. GENERATE VERIFICATION CODE
+  const verifyCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+
+  await prisma.emailVerificationToken.create({
+    data: {
+      userId: user.id,
+      token: verifyCode,
+      expiresAt,
+    },
+  });
+
+  // 3. SEND EMAIL
+  const { sendVerificationEmail } = await import("@/lib/email");
+  await sendVerificationEmail(email, verifyCode);
+
+  // 4. PRE-APPROVED CONSUMER ROLE (Assigned but user is still unverified)
   await prisma.userRole.create({
     data: {
       userId: user.id,
@@ -63,14 +91,60 @@ export async function signup(formData: FormData): Promise<never> {
     },
   });
 
-  const roles = [{ role: Role.CONSUMER, status: VerificationStatus.APPROVED }];
+  // Redirect to verify page with email hint
+  redirect(`/verify-email?email=${encodeURIComponent(email)}`);
+}
+
+export async function verifyEmail(formData: FormData): Promise<never> {
+  const email = formData.get("email") as string;
+  const code = formData.get("code") as string;
+
+  if (!email || !code) {
+    redirect(`/verify-email?email=${encodeURIComponent(email)}&error=Verification code is required.`);
+  }
+
+  const user = await prisma.user.findUnique({ 
+    where: { email },
+    include: { verificationTokens: true }
+  });
+
+  if (!user) {
+    redirect("/signup?error=User not found.");
+  }
+
+  const validToken = user.verificationTokens.find(
+    (t: EmailVerificationToken) => t.token === code && t.expiresAt > new Date()
+  );
+
+  if (!validToken) {
+    redirect(`/verify-email?email=${encodeURIComponent(email)}&error=Invalid or expired verification code.`);
+  }
+
+  // Success: Verify User
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { emailVerified: true }
+  });
+
+  // Delete tokens
+  await prisma.emailVerificationToken.deleteMany({
+    where: { userId: user.id }
+  });
+
+  // Log in immediately
+  const { roles: userRoles } = await prisma.user.findUnique({
+    where: { id: user.id },
+    include: { roles: true }
+  }) || { roles: [] };
+
   const token = await createToken({
     userId: user.id,
     email: user.email,
     name: user.name ?? undefined,
-    roles: rolesToPayload(roles),
+    roles: rolesToPayload(userRoles),
   });
   await setSessionCookie(token);
+
   redirect("/");
 }
 
@@ -88,6 +162,10 @@ export async function login(formData: FormData): Promise<never> {
   });
   if (!user) {
     redirect("/login?error=" + encodeURIComponent("Account not found. Please check your email or signup."));
+  }
+
+  if (!user.emailVerified) {
+    redirect(`/verify-email?email=${encodeURIComponent(email)}&error=Please verify your email to log in.`);
   }
 
   const valid = await verifyPassword(password, user.password);

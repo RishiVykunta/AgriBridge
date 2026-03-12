@@ -47,15 +47,18 @@ export default async function SignupPage({ searchParams }: Props) {
             </div>
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-zinc-700">
-                Mobile (optional)
+                Mobile Number
               </label>
               <input
                 id="phone"
                 name="phone"
                 type="tel"
+                required
                 autoComplete="tel"
+                pattern="[6-9]\d{9}"
+                title="Please enter a valid 10-digit Indian mobile number."
                 className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                placeholder="10-digit mobile"
+                placeholder="10-digit mobile (e.g. 9876543210)"
               />
             </div>
             <div>
@@ -69,7 +72,7 @@ export default async function SignupPage({ searchParams }: Props) {
                 required
                 autoComplete="email"
                 className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                placeholder="you@example.com"
+                placeholder="you@gmail.com"
               />
             </div>
             <PasswordField
@@ -77,7 +80,7 @@ export default async function SignupPage({ searchParams }: Props) {
               name="password"
               label="Password"
               autoComplete="new-password"
-              placeholder="At least 8 characters"
+              placeholder="Strong password (8+ chars)"
               minLength={8}
             />
             <button
