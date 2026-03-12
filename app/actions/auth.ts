@@ -79,7 +79,8 @@ export async function signup(formData: FormData): Promise<never> {
 
   // 2. GENERATE VERIFICATION CODE
   const verifyCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
-  const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+  const expirySeconds = parseInt(process.env.OTP_EXPIRY_SECONDS || "900");
+  const expiresAt = new Date(Date.now() + expirySeconds * 1000);
 
   await prisma.emailVerificationToken.create({
     data: {
