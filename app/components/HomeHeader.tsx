@@ -40,12 +40,24 @@ export function HomeHeader({ session }: HomeHeaderProps) {
   const [wishlistCount, setWishlistCount] = useState<number>(
     session?.wishlistCount ?? 0
   );
+  const [isTabClaimed, setIsTabClaimed] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Keep local counts in sync with server-provided values on initial render / refresh
   useEffect(() => {
+    setIsMounted(true);
+    const claimed = sessionStorage.getItem("agribridge_session_claimed") === "true";
+    setIsTabClaimed(claimed);
+    
     setCartCount(session?.cartCount ?? 0);
     setWishlistCount(session?.wishlistCount ?? 0);
   }, [session?.cartCount, session?.wishlistCount]);
+
+  const claimSession = () => {
+    sessionStorage.setItem("agribridge_session_claimed", "true");
+    setIsTabClaimed(true);
+    router.refresh();
+  };
 
   // Listen for cart updates dispatched from product cards
   useEffect(() => {
@@ -229,67 +241,92 @@ export function HomeHeader({ session }: HomeHeaderProps) {
               </Link>
 
               {isLoggedIn ? (
-                <>
-                  {/* Admin notification bell */}
-                  {isAdmin && (
+                isMounted && !isTabClaimed ? (
+                  <div className="flex items-center gap-3">
                     <button
-                      type="button"
-                      onClick={() => router.push("/dashboard/admin")}
-                      className="relative hidden sm:flex items-center justify-center rounded-full border border-zinc-300 p-2 text-zinc-700 hover:border-amber-500 hover:text-amber-700"
-                      aria-label="Admin notifications"
+                      onClick={claimSession}
+                      className="text-[11px] font-black uppercase tracking-widest bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
                     >
-                      <Bell size={16} />
-                      {adminNotificationCount > 0 && (
-                        <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">
-                          {adminNotificationCount}
-                        </span>
-                      )}
+                      Resume as {session?.name || "User"}
                     </button>
-                  )}
-
-                  {/* Admin dashboard button */}
-                  {isAdmin && (
                     <button
-                      type="button"
-                      onClick={() => router.push("/dashboard/admin")}
-                      className="hidden md:flex items-center gap-1.5 rounded-md border border-emerald-600 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100 transition-colors"
+                      onClick={async () => {
+                        await logout();
+                        sessionStorage.removeItem("agribridge_session_claimed");
+                        localStorage.removeItem("agribridge_tabs_open");
+                        router.refresh();
+                      }}
+                      className="text-[11px] font-black uppercase tracking-widest text-zinc-400 hover:text-zinc-600"
                     >
-                      <Truck size={16} />
-                      <span>Admin Dashboard</span>
+                      Not you?
                     </button>
-                  )}
-
-                  {/* Account / Switch role for non-admins only */}
-                  {!isAdmin && (
-                    <button
-                      type="button"
-                      onClick={() => router.push("/dashboard")}
-                      className="hidden sm:flex items-center gap-1 rounded-md border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:border-emerald-500 hover:text-emerald-700"
-                    >
-                      <User size={16} />
-                      <span>Account</span>
-                    </button>
-                  )}
-
-                  <div className="hidden lg:flex flex-col items-end text-xs text-zinc-700">
-                    <span className="font-medium">
-                      {session?.name || session?.email}
-                    </span>
-                    <span className="text-zinc-400">
-                      {isAdmin ? "Admin" : "Logged in"}
-                    </span>
                   </div>
+                ) : (
+                  <>
+                    {/* Admin notification bell */}
+                    {isAdmin && (
+                      <button
+                        type="button"
+                        onClick={() => router.push("/dashboard/admin")}
+                        className="relative hidden sm:flex items-center justify-center rounded-full border border-zinc-300 p-2 text-zinc-700 hover:border-amber-500 hover:text-amber-700"
+                        aria-label="Admin notifications"
+                      >
+                        <Bell size={16} />
+                        {adminNotificationCount > 0 && (
+                          <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">
+                            {adminNotificationCount}
+                          </span>
+                        )}
+                      </button>
+                    )}
 
-                  {/* Logout */}
-                  <form action={logout} className="hidden sm:block">
+                    {/* Admin dashboard button */}
+                    {isAdmin && (
+                      <button
+                        type="button"
+                        onClick={() => router.push("/dashboard/admin")}
+                        className="hidden md:flex items-center gap-1.5 rounded-md border border-emerald-600 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100 transition-colors"
+                      >
+                        <Truck size={16} />
+                        <span>Admin Dashboard</span>
+                      </button>
+                    )}
+
+                    {/* Account / Switch role for non-admins only */}
+                    {!isAdmin && (
+                      <button
+                        type="button"
+                        onClick={() => router.push("/dashboard")}
+                        className="hidden sm:flex items-center gap-1 rounded-md border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:border-emerald-500 hover:text-emerald-700"
+                      >
+                        <User size={16} />
+                        <span>Account</span>
+                      </button>
+                    )}
+
+                    <div className="hidden lg:flex flex-col items-end text-xs text-zinc-700">
+                      <span className="font-medium">
+                        {session?.name || session?.email}
+                      </span>
+                      <span className="text-zinc-400">
+                        {isAdmin ? "Admin" : "Logged in"}
+                      </span>
+                    </div>
+
+                    {/* Logout */}
                     <button
-                      type="submit"
-                      className="rounded-md border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:border-red-500 hover:text-red-600"
+                      onClick={async () => {
+                        await logout();
+                        sessionStorage.removeItem("agribridge_session_claimed");
+                        localStorage.removeItem("agribridge_tabs_open");
+                        router.refresh();
+                      }}
+                      className="hidden sm:block rounded-md border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:border-red-500 hover:text-red-600"
                     >
                       Logout
                     </button>
-                  </form>
-                </>
+                  </>
+                )
               ) : (
                 <Link
                   href="/login"
