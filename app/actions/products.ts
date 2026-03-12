@@ -167,29 +167,57 @@ export async function addProduct(
 
 export async function approveProduct(productId: string): Promise<void> {
   const session = await getSession();
-  if (!session || !hasRole(session, "ADMIN")) {
+  const isAdmin = hasRole(session, "ADMIN");
+  
+  if (!session || !isAdmin) {
     redirect("/login");
   }
-  await prisma.product.update({
-    where: { id: productId },
-    data: { status: ProductStatus.APPROVED },
-  });
+
+  try {
+    await prisma.product.update({
+      where: { id: productId },
+      data: { status: "APPROVED" as any },
+    });
+    
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath("/dashboard/admin/products");
+    revalidatePath("/dashboard/admin");
+  } catch (error) {
+    console.error("Error in approveProduct:", error);
+    return;
+  }
+  redirect("/dashboard/admin/products?message=" + encodeURIComponent("Product approved."));
 }
 
 export async function rejectProduct(productId: string): Promise<void> {
   const session = await getSession();
-  if (!session || !hasRole(session, "ADMIN")) {
+  const isAdmin = hasRole(session, "ADMIN");
+
+  if (!session || !isAdmin) {
     redirect("/login");
   }
-  await prisma.product.update({
-    where: { id: productId },
-    data: { status: ProductStatus.REJECTED },
-  });
+
+  try {
+    await prisma.product.update({
+      where: { id: productId },
+      data: { status: "REJECTED" as any },
+    });
+    
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath("/dashboard/admin/products");
+    revalidatePath("/dashboard/admin");
+  } catch (error) {
+    console.error("Error in rejectProduct:", error);
+    return;
+  }
+  redirect("/dashboard/admin/products?message=" + encodeURIComponent("Product rejected."));
 }
 
 export async function deleteProduct(productId: string): Promise<void> {
   const session = await getSession();
-  if (!session || !hasRole(session, "ADMIN")) {
+  const isAdmin = hasRole(session, "ADMIN");
+
+  if (!session || !isAdmin) {
     redirect("/login");
   }
 
