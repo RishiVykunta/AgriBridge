@@ -8,6 +8,7 @@ import {
   verifyPassword,
   createToken,
   setSessionCookie,
+  getSession,
 } from "@/lib/auth";
 import { Role, VerificationStatus } from "@prisma/client";
 import { sendResetEmail } from "@/lib/email";
@@ -461,4 +462,20 @@ export async function completePasswordReset(formData: FormData): Promise<never> 
   });
 
   redirect("/login?message=" + encodeURIComponent("Password reset successfully. You can now log in."));
+}
+
+/** Refresh the session cookie if it's still valid (sliding expiration) */
+export async function touchSession(): Promise<{ success: boolean }> {
+  const session = await getSession();
+  if (!session) return { success: false };
+
+  // Re-issue the token and reset the cookie
+  const token = await createToken({
+    userId: session.userId,
+    email: session.email,
+    name: session.name,
+    roles: session.roles,
+  });
+  await setSessionCookie(token);
+  return { success: true };
 }

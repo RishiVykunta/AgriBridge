@@ -29,7 +29,7 @@ export async function createToken(payload: Omit<SessionPayload, "exp">): Promise
   const { roles, ...rest } = payload;
   return new SignJWT({ ...rest, roles: roles ?? [] })
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("7d")
+    .setExpirationTime("2h")
     .setIssuedAt()
     .sign(JWT_SECRET);
 }
@@ -52,7 +52,6 @@ export async function setSessionCookie(token: string): Promise<void> {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: COOKIE_MAX_AGE,
     path: "/",
   });
 }
