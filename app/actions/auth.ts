@@ -29,8 +29,13 @@ function getDefaultDashboardPath(roles: { role: string; status: string }[]): str
 export async function signup(formData: FormData): Promise<never> {
   const email = (formData.get("email") as string)?.trim().toLowerCase();
   const password = formData.get("password") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
   const name = (formData.get("name") as string)?.trim();
   const phone = (formData.get("phone") as string)?.trim() || null;
+
+  if (password !== confirmPassword) {
+    redirect("/signup?error=" + encodeURIComponent("Passwords do not match."));
+  }
 
   // 1. STRICTOR VALIDATION
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -55,16 +60,22 @@ export async function signup(formData: FormData): Promise<never> {
     redirect("/signup?error=" + encodeURIComponent("An account with this email already exists."));
   }
 
-  const hashed = await hashPassword(password);
-  const user = await prisma.user.create({
-    data: {
-      email,
-      password: hashed,
-      name: name || null,
-      phone: phone || null,
-      emailVerified: false, // New users start as unverified
-    },
-  });
+  let user;
+  try {
+    const hashed = await hashPassword(password);
+    user = await prisma.user.create({
+      data: {
+        email,
+        password: hashed,
+        name: name || null,
+        phone: phone || null,
+        emailVerified: false, // New users start as unverified
+      },
+    });
+  } catch (error) {
+    console.error("Signup Database Error:", error);
+    redirect("/signup?error=" + encodeURIComponent("Database error. Ensure migrations are applied (npx prisma db push)."));
+  }
 
   // 2. GENERATE VERIFICATION CODE
   const verifyCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
