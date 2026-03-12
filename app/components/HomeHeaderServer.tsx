@@ -1,12 +1,13 @@
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { HomeHeader } from "./HomeHeader";
+import { getAdminNotificationCounts } from "@/app/actions/applications";
 
 export async function HomeHeaderServer() {
   const session = await getSession();
 
   let isAdmin = false;
-  let pendingRoleRequests = 0;
+  let adminNotificationCount = 0;
   let cartCount = 0;
   let wishlistCount = 0;
 
@@ -17,12 +18,8 @@ export async function HomeHeaderServer() {
   }
 
   if (isAdmin) {
-    pendingRoleRequests = await prisma.userRole.count({
-      where: {
-        status: "PENDING",
-        role: { in: ["FARMER", "RETAILER"] },
-      },
-    });
+    const counts = await getAdminNotificationCounts();
+    adminNotificationCount = counts.total;
   }
 
   if (session) {
@@ -42,7 +39,7 @@ export async function HomeHeaderServer() {
         email: session.email,
         name: session.name ?? null,
         isAdmin,
-        pendingRoleRequests,
+        adminNotificationCount,
         cartCount,
         wishlistCount,
       }

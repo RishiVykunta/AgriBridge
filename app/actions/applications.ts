@@ -65,21 +65,34 @@ export async function submitSpecialistConsultation(data: {
 
 export async function getAdminNotificationCounts() {
   try {
-    const loanCount = await prisma.loanApplication.count({
-      where: { isRead: false },
-    });
-    const specialistCount = await prisma.specialistConsultation.count({
-      where: { isRead: false },
-    });
+    const [loanCount, specialistCount, productCount, roleCount] = await Promise.all([
+      prisma.loanApplication.count({
+        where: { isRead: false },
+      }),
+      prisma.specialistConsultation.count({
+        where: { isRead: false },
+      }),
+      prisma.product.count({
+        where: { status: "PENDING" },
+      }),
+      prisma.userRole.count({
+        where: {
+          status: "PENDING",
+          role: { in: ["FARMER", "RETAILER"] },
+        },
+      }),
+    ]);
 
     return {
       loans: loanCount,
       specialists: specialistCount,
-      total: loanCount + specialistCount,
+      products: productCount,
+      roles: roleCount,
+      total: loanCount + specialistCount + productCount + roleCount,
     };
   } catch (error) {
     console.error("Error fetching notification counts:", error);
-    return { loans: 0, specialists: 0, total: 0 };
+    return { loans: 0, specialists: 0, products: 0, roles: 0, total: 0 };
   }
 }
 

@@ -43,8 +43,8 @@ export default async function AdminDashboardPage() {
 
   const secondaryActions = [
     { title: "Catalog Management", href: "/dashboard/admin/catalog", color: "blue" },
-    { title: "Product Requests", href: "/dashboard/admin/products", color: "rose" },
-    { title: "Role Verifications", href: "/dashboard/admin/roles", color: "violet" },
+    { title: "Product Requests", href: "/dashboard/admin/products", color: "rose", count: counts.products },
+    { title: "Role Verifications", href: "/dashboard/admin/roles", color: "violet", count: counts.roles },
     { title: "Order History", href: "#", color: "slate" },
   ];
 
@@ -122,7 +122,7 @@ export default async function AdminDashboardPage() {
                  </div>
                  {card.count !== undefined && card.count > 0 && (
                     <div className="flex items-center gap-2 bg-zinc-900 text-white px-4 py-1.5 rounded-2xl text-[11px] font-black tracking-widest shadow-lg">
-                       <span className="h-2 w-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                       <svg className="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
                        {card.count} NEW
                     </div>
                  )}
@@ -155,7 +155,15 @@ export default async function AdminDashboardPage() {
                    href={link.href}
                    className={`flex items-center justify-between p-7 rounded-[24px] bg-white border border-zinc-100 shadow-sm transition-all group hover:scale-[1.02] hover:shadow-lg ${colorMap[link.color as keyof typeof colorMap]}`}
                  >
-                    <span className="text-[11px] font-black text-zinc-600 group-hover:text-inherit transition-colors uppercase tracking-[0.2em]">{link.title}</span>
+                    <div className="flex items-center gap-3">
+                       <span className="text-[11px] font-black text-zinc-600 group-hover:text-inherit transition-colors uppercase tracking-[0.2em]">{link.title}</span>
+                       {(link as any).count > 0 && (
+                          <div className="flex items-center gap-1.5 bg-zinc-900 text-white px-2.5 py-1 rounded-full text-[9px] font-black">
+                             <svg className="w-2.5 h-2.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
+                             {(link as any).count}
+                          </div>
+                       )}
+                    </div>
                     <div className="h-8 w-8 rounded-xl bg-zinc-50 flex items-center justify-center text-zinc-300 group-hover:bg-current group-hover:text-white transition-all transform group-hover:rotate-45">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
                     </div>

@@ -19,7 +19,7 @@ type HeaderSession = {
   email: string;
   name?: string | null;
   isAdmin?: boolean;
-  pendingRoleRequests?: number;
+  adminNotificationCount?: number;
   cartCount?: number;
   wishlistCount?: number;
 } | null;
@@ -35,7 +35,7 @@ export function HomeHeader({ session }: HomeHeaderProps) {
   const [query, setQuery] = useState("");
   const isLoggedIn = !!session;
   const isAdmin = !!session?.isAdmin;
-  const pendingRoleRequests = session?.pendingRoleRequests ?? 0;
+  const adminNotificationCount = session?.adminNotificationCount ?? 0;
   const [cartCount, setCartCount] = useState<number>(session?.cartCount ?? 0);
   const [wishlistCount, setWishlistCount] = useState<number>(
     session?.wishlistCount ?? 0
@@ -234,14 +234,14 @@ export function HomeHeader({ session }: HomeHeaderProps) {
                   {isAdmin && (
                     <button
                       type="button"
-                      onClick={() => router.push("/dashboard/admin/roles")}
+                      onClick={() => router.push("/dashboard/admin")}
                       className="relative hidden sm:flex items-center justify-center rounded-full border border-zinc-300 p-2 text-zinc-700 hover:border-amber-500 hover:text-amber-700"
-                      aria-label="Role requests"
+                      aria-label="Admin notifications"
                     >
                       <Bell size={16} />
-                      {pendingRoleRequests > 0 && (
+                      {adminNotificationCount > 0 && (
                         <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">
-                          {pendingRoleRequests}
+                          {adminNotificationCount}
                         </span>
                       )}
                     </button>
