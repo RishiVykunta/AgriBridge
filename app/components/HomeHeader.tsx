@@ -141,13 +141,13 @@ export function HomeHeader({ session }: HomeHeaderProps) {
           <div></div>
 
           <div className="flex items-center gap-6">
-            <Link href="/signup" className="hover:underline">
+            <Link href="/sell" className="hover:underline">
               Sell on AgriBridge
             </Link>
-            <Link href="#" className="hover:underline">
+            <Link href="/bulk-orders" className="hover:underline">
               Bulk Order Enquiries
             </Link>
-            <Link href="#" className="hover:underline">
+            <Link href="/corporate" className="hover:underline">
               Corporate Site
             </Link>
 
