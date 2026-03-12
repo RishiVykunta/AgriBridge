@@ -69,8 +69,10 @@ export default function SessionInactivityHandler() {
       localStorage.setItem(TAB_COUNT_KEY, newCount.toString());
 
       if (newCount === 0) {
-        // Last tab closing! Use sendBeacon for high reliability
-        navigator.sendBeacon("/api/auth/logout");
+        // Last tab closing! 
+        // NOTE: We used to sendBeacon here, but it triggers on simple page navigation too.
+        // We rely on session-only cookies instead for security.
+        // navigator.sendBeacon("/api/auth/logout");
       }
     };
 
