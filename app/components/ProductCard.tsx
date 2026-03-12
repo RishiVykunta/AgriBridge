@@ -99,7 +99,9 @@ export function ProductCard({
     setTimeout(() => setToast(null), 2000);
   };
 
-  const handleWishlistToggle = () => {
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!productId || isOutOfStock) return;
     if (requireLogin()) return;
 
@@ -135,7 +137,9 @@ export function ProductCard({
     });
   };
 
-  const handleAddToCart = (opts?: { buyNow?: boolean }) => {
+  const handleAddToCart = (e: React.MouseEvent, opts?: { buyNow?: boolean }) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!productId || isOutOfStock) return;
     if (requireLogin()) return;
 
@@ -170,14 +174,15 @@ export function ProductCard({
 
   return (
     <article
-      className="group flex w-44 sm:w-full flex-col rounded-[32px] border border-zinc-200 bg-white overflow-hidden 
+      onClick={() => router.push(href)}
+      className="cursor-pointer group flex w-44 sm:w-full flex-col rounded-[32px] border border-zinc-200 bg-white overflow-hidden 
       transition-all duration-500 hover:shadow-2xl hover:border-emerald-500/50 hover:-translate-y-1.5"
     >
       {/* IMAGE SECTION */}
       <div
         className="relative bg-zinc-100 overflow-hidden h-[180px] sm:h-[260px]"
       >
-        <Link href={href} className="block h-full">
+        <div className="block h-full">
           {/* OFFER BADGE */}
           {discount && (
             <span className="absolute left-4 top-4 z-20 rounded-full bg-red-600 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-red-500/20">
@@ -197,7 +202,7 @@ export function ProductCard({
               📦
             </div>
           )}
-        </Link>
+        </div>
 
         {/* WISHLIST BUTTON */}
         <button
@@ -234,11 +239,11 @@ export function ProductCard({
            )}
         </div>
 
-        <Link href={href} className="group/title">
+        <div className="group/title">
           <h3 className="line-clamp-2 text-sm font-bold text-zinc-900 leading-tight mb-2 group-hover/title:text-emerald-700 transition-colors">
             {name}
           </h3>
-        </Link>
+        </div>
 
         {/* PRICE SECTION */}
         <div className="mt-auto pt-4 border-t border-zinc-100">
@@ -257,7 +262,7 @@ export function ProductCard({
           <div className="flex flex-col gap-2">
             <button
               type="button"
-              onClick={() => handleAddToCart()}
+              onClick={(e) => handleAddToCart(e)}
               className="w-full rounded-xl bg-emerald-600 text-white py-2.5 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 disabled:bg-zinc-200 disabled:shadow-none flex items-center justify-center gap-2"
               disabled={isOutOfStock || isPending}
             >
@@ -266,7 +271,7 @@ export function ProductCard({
             </button>
             <button
               type="button"
-              onClick={() => handleAddToCart({ buyNow: true })}
+              onClick={(e) => handleAddToCart(e, { buyNow: true })}
               className="w-full rounded-xl bg-zinc-900 text-white py-2.5 text-[10px] font-black uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-lg shadow-zinc-900/10 disabled:bg-zinc-200 disabled:shadow-none flex items-center justify-center gap-2"
               disabled={isOutOfStock || isPending}
             >
