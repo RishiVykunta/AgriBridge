@@ -234,9 +234,11 @@ export function ProductCard({
            )}
         </div>
 
-        <h3 className="line-clamp-2 text-sm font-bold text-zinc-900 leading-tight mb-2 group-hover:text-emerald-700 transition-colors">
-          {name}
-        </h3>
+        <Link href={href} className="group/title">
+          <h3 className="line-clamp-2 text-sm font-bold text-zinc-900 leading-tight mb-2 group-hover/title:text-emerald-700 transition-colors">
+            {name}
+          </h3>
+        </Link>
 
         {/* PRICE SECTION */}
         <div className="mt-auto pt-4 border-t border-zinc-100">
@@ -252,23 +254,24 @@ export function ProductCard({
             )}
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2">
             <button
               type="button"
               onClick={() => handleAddToCart()}
-              className="flex-1 rounded-2xl bg-zinc-900 text-white py-2.5 text-xs font-bold uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-zinc-900/10 disabled:bg-zinc-200 disabled:shadow-none"
+              className="w-full rounded-xl bg-emerald-600 text-white py-2.5 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 disabled:bg-zinc-200 disabled:shadow-none flex items-center justify-center gap-2"
               disabled={isOutOfStock || isPending}
             >
-              Add
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24 text-white"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+              <span>Add to Cart</span>
             </button>
             <button
               type="button"
-              title="Buy Now"
               onClick={() => handleAddToCart({ buyNow: true })}
-              className="rounded-2xl border border-zinc-200 p-2.5 hover:border-emerald-500 hover:text-emerald-600 transition-all disabled:opacity-50"
+              className="w-full rounded-xl bg-zinc-900 text-white py-2.5 text-[10px] font-black uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-lg shadow-zinc-900/10 disabled:bg-zinc-200 disabled:shadow-none flex items-center justify-center gap-2"
               disabled={isOutOfStock || isPending}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              <span>Buy Now</span>
             </button>
           </div>
         </div>
