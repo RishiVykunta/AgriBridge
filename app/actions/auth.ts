@@ -11,7 +11,7 @@ import {
   getSession,
 } from "@/lib/auth";
 import { Role, VerificationStatus, EmailVerificationToken } from "@prisma/client";
-import { sendResetEmail } from "@/lib/email";
+import { sendResetEmail, sendVerificationEmail } from "@/lib/email";
 
 function rolesToPayload(roles: { role: Role; status: VerificationStatus }[]) {
   return roles.map((r) => ({ role: r.role, status: r.status }));
@@ -79,7 +79,6 @@ export async function signup(formData: FormData): Promise<never> {
   });
 
   // 3. SEND EMAIL
-  const { sendVerificationEmail } = await import("@/lib/email");
   await sendVerificationEmail(email, verifyCode);
 
   // 4. PRE-APPROVED CONSUMER ROLE (Assigned but user is still unverified)
