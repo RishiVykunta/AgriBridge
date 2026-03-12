@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import {
   hashPassword,
@@ -9,6 +10,7 @@ import {
   setSessionCookie,
 } from "@/lib/auth";
 import { Role, VerificationStatus } from "@prisma/client";
+import { sendResetEmail } from "@/lib/email";
 
 function rolesToPayload(roles: { role: Role; status: VerificationStatus }[]) {
   return roles.map((r) => ({ role: r.role, status: r.status }));
@@ -353,4 +355,110 @@ export async function resetUserPassword(formData: FormData): Promise<never> {
   });
 
   redirect(`/dashboard/admin/users/${userId}?message=` + encodeURIComponent("Password reset successfully."));
+}
+
+/** Simulate a Google OAuth login for demo purposes */
+export async function mockGoogleLogin(): Promise<never> {
+  const email = "google@example.com";
+  let user = await prisma.user.findUnique({
+    where: { email },
+    include: { roles: true },
+  });
+
+  if (!user) {
+    const hashed = await hashPassword("supersecret123");
+    user = await prisma.user.create({
+      data: {
+        email,
+        password: hashed,
+        name: "Google Demo User",
+      },
+      include: { roles: true }
+    });
+    
+    await prisma.userRole.create({
+      data: {
+        userId: user.id,
+        role: "CONSUMER",
+        status: "APPROVED",
+      },
+    });
+
+    user = (await prisma.user.findUnique({
+      where: { email },
+      include: { roles: true },
+    }))!;
+  }
+
+  const rolesPayload = rolesToPayload(user.roles);
+  const token = await createToken({
+    userId: user.id,
+    email: user.email,
+    name: user.name ?? undefined,
+    roles: rolesPayload,
+  });
+  await setSessionCookie(token);
+  redirect("/");
+}
+
+/** Request Password Reset (mocking email by logging to console) */
+export async function requestPasswordReset(formData: FormData): Promise<never> {
+  const email = (formData.get("email") as string)?.trim().toLowerCase();
+  if (!email) {
+    redirect("/forgot-password?error=" + encodeURIComponent("Email is required."));
+  }
+
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (user) {
+    const token = crypto.randomUUID();
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 1); // 1 hour expiry
+
+    await prisma.passwordResetToken.create({
+      data: {
+        userId: user.id,
+        token,
+        expiresAt,
+      },
+    });
+
+    const resetLink = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/reset-password?token=${token}`;
+    await sendResetEmail(email, resetLink);
+  }
+
+  redirect("/forgot-password?message=" + encodeURIComponent("If an account exists, a password reset link has been sent to your email."));
+}
+
+/** Complete Password Reset */
+export async function completePasswordReset(formData: FormData): Promise<never> {
+  const token = formData.get("token") as string;
+  const password = formData.get("password") as string;
+
+  if (!token || !password) {
+    redirect("/reset-password?error=" + encodeURIComponent("Token and new password are required."));
+  }
+  if (password.length < 8) {
+    redirect(`/reset-password?token=${token}&error=` + encodeURIComponent("Password must be at least 8 characters."));
+  }
+
+  const resetToken = await prisma.passwordResetToken.findUnique({
+    where: { token },
+    include: { user: true },
+  });
+
+  if (!resetToken || resetToken.expiresAt < new Date()) {
+    redirect("/reset-password?error=" + encodeURIComponent("Invalid or expired reset token."));
+  }
+
+  const hashed = await hashPassword(password);
+  await prisma.user.update({
+    where: { id: resetToken.userId },
+    data: { password: hashed },
+  });
+
+  await prisma.passwordResetToken.deleteMany({
+    where: { userId: resetToken.userId },
+  });
+
+  redirect("/login?message=" + encodeURIComponent("Password reset successfully. You can now log in."));
 }
