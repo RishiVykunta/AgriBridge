@@ -100,8 +100,10 @@ export async function addProduct(
   const isFarmer = hasRole(session, "FARMER");
   const isRetailer = hasRole(session, "RETAILER");
 
-  if (!isAdmin && !isFarmer && !isRetailer) {
-    return { error: "Only approved Farmers, Retailers, or Admins can add products." };
+  const isConsumer = hasRole(session, "CONSUMER");
+
+  if (!isAdmin && !isFarmer && !isRetailer && !isConsumer) {
+    return { error: "Only approved Farmers, Retailers, Consumers, or Admins can add products." };
   }
 
   const status = isAdmin ? ProductStatus.APPROVED : ProductStatus.PENDING;
@@ -141,16 +143,26 @@ export async function addProduct(
     },
   });
 
+  const successMsg = `Product "${product.name}" submitted for admin approval.`;
+  const encodedMsg = encodeURIComponent(successMsg);
+
+  const { revalidatePath } = await import("next/cache");
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/farmer");
+  revalidatePath("/dashboard/retailer");
+
   if (isAdmin) {
     redirect(`/dashboard/admin?message=${encodeURIComponent("Product added and approved.")}`);
   }
+  if (isFarmer) {
+    redirect(`/dashboard/farmer?message=${encodedMsg}`);
+  }
+  if (isRetailer) {
+    redirect(`/dashboard/retailer?message=${encodedMsg}`);
+  }
 
   // Farmer / Retailer flow – pending approval
-  redirect(
-    `/dashboard?message=${encodeURIComponent(
-      `Product "${product.name}" submitted for admin approval.`
-    )}`
-  );
+  redirect(`/dashboard?message=${encodedMsg}`);
 }
 
 export async function approveProduct(productId: string): Promise<void> {
