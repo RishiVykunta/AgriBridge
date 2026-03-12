@@ -200,43 +200,98 @@ export default async function FarmerDashboardPage({ searchParams }: Props) {
 
   // APPROVED: show dashboard (e-commerce features + accessibility)
   const farmerSections = [
-    { title: "Browse products", desc: "Same shopping experience as consumers.", href: "/", icon: "🛒", ariaLabel: "Browse products" },
-    { title: "Add products", desc: "Create new product listings (go to admin for approval).", href: "/dashboard/products/new", icon: "➕", ariaLabel: "Add new products" },
-    { title: "My products", desc: "Manage your existing listings.", href: "#", icon: "🌾", ariaLabel: "Manage your farm products" },
-    { title: "Orders", desc: "View & manage incoming orders.", href: "#", icon: "📋", ariaLabel: "View orders" },
+    { 
+      title: "Storefront", 
+      desc: "View how your products look to consumers.", 
+      href: "/", 
+      icon: "🏪", 
+      color: "bg-emerald-50 text-emerald-600",
+      ariaLabel: "Browse products" 
+    },
+    { 
+      title: "Add Products", 
+      desc: "Create new product listings (requires admin approval).", 
+      href: "/dashboard/products/new", 
+      icon: "✨", 
+      color: "bg-blue-50 text-blue-600",
+      ariaLabel: "Add new products" 
+    },
+    { 
+      title: "My Inventory", 
+      desc: "Manage and track your existing farm listings.", 
+      href: "/dashboard/products", 
+      icon: "📦", 
+      color: "bg-amber-50 text-amber-600",
+      ariaLabel: "Manage your farm products" 
+    },
+    { 
+      title: "Order Requests", 
+      desc: "View and manage incoming customer orders.", 
+      href: "#", 
+      icon: "📋", 
+      color: "bg-purple-50 text-purple-600",
+      ariaLabel: "View orders" 
+    },
   ];
 
   return (
-    <div role="main" aria-label="Farmer dashboard">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-zinc-900">Farmer Dashboard</h1>
-        <span className="rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-800" aria-hidden="true">
-          Farmer
-        </span>
+    <div role="main" aria-label="Farmer dashboard" className="max-w-5xl mx-auto">
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold text-zinc-900 tracking-tight">Farmer Dashboard</h1>
+          <p className="mt-2 text-zinc-600 max-w-2xl">
+            Welcome back! Manage your farm's digital storefront. Sell fresh produce like vegetables, 
+            fruits, grains, and organic goods.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center rounded-full bg-emerald-100 px-3.5 py-1 text-sm font-bold text-emerald-800 ring-1 ring-inset ring-emerald-600/20">
+            <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-600"></span>
+            Farmer Account
+          </span>
+        </div>
       </div>
-      <p className="text-zinc-600">
-        Sell farm produce only: vegetables, fruits, grains, dairy, organic. Add / edit / delete your
-        products, manage inventory & orders.
-      </p>
 
-      <nav className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-label="Farmer dashboard quick links">
+      <nav className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-2" aria-label="Farmer dashboard quick links">
         {farmerSections.map((card) => (
           <Link
             key={card.title}
             href={card.href}
             aria-label={card.ariaLabel}
-            className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm transition hover:border-emerald-300 hover:shadow focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+            className="group relative flex items-start gap-5 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-emerald-300 hover:shadow-lg hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
           >
-            <span className="text-2xl" aria-hidden="true">{card.icon}</span>
-            <h2 className="mt-2 font-semibold text-zinc-900">{card.title}</h2>
-            <p className="mt-1 text-sm text-zinc-500">{card.desc}</p>
+            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-2xl ${card.color} shadow-sm transition-transform duration-300 group-hover:scale-110`}>
+              {card.icon}
+            </div>
+            <div className="flex-1">
+              <h2 className="text-lg font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors uppercase tracking-wide text-sm mb-1">{card.title}</h2>
+              <p className="text-sm text-zinc-500 leading-relaxed">{card.desc}</p>
+              <div className="mt-4 flex items-center text-sm font-bold text-emerald-600 group-hover:translate-x-1 transition-transform">
+                Go to {card.title} <span className="ml-1">→</span>
+              </div>
+            </div>
+            {card.href === "#" && (
+              <span className="absolute top-4 right-4 rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Coming Soon</span>
+            )}
           </Link>
         ))}
       </nav>
 
-      <p className="mt-8 text-sm text-zinc-500">
-        <Link href="/dashboard" className="text-emerald-600 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded">
-          ← Switch role
+      <div className="mt-12 rounded-2xl bg-zinc-900 p-8 text-white shadow-xl overflow-hidden relative">
+        <div className="relative z-10">
+          <h3 className="text-xl font-bold">Need Help?</h3>
+          <p className="mt-2 text-zinc-300 text-sm max-w-md">Our specialist consultation service is here to help you grow better and sell faster.</p>
+          <Link href="/services" className="mt-4 inline-block rounded-xl bg-emerald-500 px-6 py-2.5 text-sm font-bold text-white hover:bg-emerald-400 transition shadow-lg shadow-emerald-500/20">
+            Talk to an expert
+          </Link>
+        </div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-emerald-500/10 rounded-full -ml-16 -mb-16 blur-3xl"></div>
+      </div>
+
+      <p className="mt-10 text-center">
+        <Link href="/dashboard" className="inline-flex items-center gap-2 text-sm font-bold text-zinc-400 hover:text-emerald-600 transition-colors py-2 px-4 rounded-full border border-zinc-200 hover:border-emerald-200">
+          <span>←</span> Switch your dashboard role
         </Link>
       </p>
     </div>

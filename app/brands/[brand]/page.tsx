@@ -5,6 +5,7 @@ import { formatLabelFromSlug } from "@/app/config/catalog";
 import { prisma } from "@/lib/prisma";
 import { productToUiProduct } from "@/app/lib/productUi";
 import { getSession } from "@/lib/auth";
+import type { Product, ProductMedia } from "@prisma/client";
 
 type Props = {
   params: Promise<{ brand: string }>;
@@ -26,7 +27,7 @@ export default async function BrandPage({ params }: Props) {
     orderBy: { createdAt: "desc" },
   });
 
-  const results = rows.map((p) => productToUiProduct(p));
+  const results = rows.map((p: Product & { media?: ProductMedia[] }) => productToUiProduct(p));
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900">
