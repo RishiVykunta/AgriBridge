@@ -107,8 +107,8 @@ export async function signup(formData: FormData): Promise<never> {
     await sendVerificationEmail(email, verifyCode);
   } catch (emailError) {
     console.error("Verification Email Failed:", emailError);
-    // User is created, but email failed. We still redirect to verify-email but with a warning.
-    redirect(`/verify-email?email=${encodeURIComponent(email)}&error=${encodeURIComponent("Email delivery failed. Since we're in demo mode, please note that we can only send emails to the registered account owner (arasu111004@gmail.com).")}`);
+    // User is created, but email failed.
+    redirect(`/verify-email?email=${encodeURIComponent(email)}&error=${encodeURIComponent("Failed to send verification email. Please try again or contact support.")}`);
   }
 
   // 4. PRE-APPROVED CONSUMER ROLE (Assigned but user is still unverified)
