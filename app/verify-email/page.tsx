@@ -69,7 +69,10 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
         <div className="mt-8 pt-8 border-t border-zinc-100 text-center">
           <p className="text-sm text-zinc-500">
             Didn't receive the code?{" "}
-            <Link href="/signup" className="text-emerald-600 font-bold hover:underline">
+            <div className="mt-2 p-3 bg-amber-50 border border-amber-100 rounded-lg text-xs text-amber-800 text-left">
+              <strong>Note:</strong> Since we are in demo mode using a Resend onboarding domain, emails can currently only be sent to the registered account owner (arasu111004@gmail.com). For other emails, the code won't arrive.
+            </div>
+            <Link href="/signup" className="inline-block mt-4 text-emerald-600 font-bold hover:underline">
               Try a different email
             </Link>
           </p>
