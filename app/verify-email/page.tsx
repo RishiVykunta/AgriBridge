@@ -22,7 +22,7 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
           </div>
           <h1 className="text-2xl font-black text-zinc-900">Verify your email</h1>
           <p className="mt-2 text-zinc-500">
-            We've sent a 6-digit code to <span className="font-bold text-zinc-900">{email}</span>.
+            Enter the 6-digit code sent to your email <span className="font-bold text-zinc-900">{email}</span>.
           </p>
         </div>
 

@@ -72,9 +72,21 @@ export async function signup(formData: FormData): Promise<never> {
         emailVerified: false, // New users start as unverified
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Signup Database Error:", error);
-    redirect("/signup?error=" + encodeURIComponent("Database error. Ensure migrations are applied (npx prisma db push)."));
+    
+    // Check for Prisma unique constraint violation (P2002)
+    if (error.code === 'P2002') {
+      const target = error.meta?.target || [];
+      if (target.includes('email')) {
+        redirect("/signup?error=" + encodeURIComponent("An account with this email already exists."));
+      } else if (target.includes('phone')) {
+        redirect("/signup?error=" + encodeURIComponent("This phone number is already registered to another account."));
+      }
+      redirect("/signup?error=" + encodeURIComponent("An account with this email or phone already exists."));
+    }
+
+    redirect("/signup?error=" + encodeURIComponent("Database error: " + (error.message || "Unknown error") + ". Ensure migrations are applied."));
   }
 
   // 2. GENERATE VERIFICATION CODE
