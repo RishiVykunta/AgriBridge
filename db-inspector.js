@@ -21,7 +21,7 @@ async function main() {
             console.log(`  Roles: ${u.roles.map(r => `${r.role} (${r.status})`).join(', ')}`);
         });
     } catch (err) {
-        console.error('Error fetching users:', err);
+        console.error('Error fetching users:', JSON.stringify(err, null, 2));
     } finally {
         await prisma.$disconnect();
     }
