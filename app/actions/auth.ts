@@ -187,9 +187,6 @@ export async function login(formData: FormData): Promise<never> {
     redirect("/login?error=" + encodeURIComponent("Account not found. Please check your email or signup."));
   }
 
-  if (!user.emailVerified) {
-    redirect(`/verify-email?email=${encodeURIComponent(email)}&error=Please verify your email to log in.`);
-  }
 
   const valid = await verifyPassword(password, user.password);
   if (!valid) {
