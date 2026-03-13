@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: Request) {
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  const redirectUri = `${process.env.NEXTAUTH_URL}/api/auth/google/callback`;
+  const baseUrl = process.env.NEXTAUTH_URL || new URL(request.url).origin;
+  const redirectUri = `${baseUrl}/api/auth/google/callback`;
 
-  if (!clientId || !process.env.NEXTAUTH_URL) {
-    return NextResponse.json({ error: "Missing Google Client ID or App URL configuration." }, { status: 500 });
+  if (!clientId) {
+    return NextResponse.json({ error: "Missing Google Client ID configuration." }, { status: 500 });
   }
 
   const scope = "openid email profile";

@@ -23,9 +23,11 @@ export async function GET(request: Request) {
 
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const redirectUri = `${process.env.NEXTAUTH_URL}/api/auth/google/callback`;
+  
+  const baseUrl = process.env.NEXTAUTH_URL || new URL(request.url).origin;
+  const redirectUri = `${baseUrl}/api/auth/google/callback`;
 
-  if (!clientId || !clientSecret || !process.env.NEXTAUTH_URL) {
+  if (!clientId || !clientSecret) {
     return NextResponse.redirect(new URL("/login?error=" + encodeURIComponent("Server configuration error."), request.url));
   }
 
