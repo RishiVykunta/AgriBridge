@@ -71,7 +71,7 @@ export default async function FarmerDashboardPage({ searchParams }: Props) {
                       name="fullName" 
                       type="text" 
                       required 
-                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none" 
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none text-zinc-900" 
                       placeholder="As per Government ID" 
                     />
                   </div>
@@ -81,7 +81,7 @@ export default async function FarmerDashboardPage({ searchParams }: Props) {
                       name="mobile" 
                       type="tel" 
                       required 
-                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none" 
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none text-zinc-900" 
                       placeholder="10-digit mobile" 
                     />
                   </div>
@@ -93,7 +93,7 @@ export default async function FarmerDashboardPage({ searchParams }: Props) {
                     name="aadhaar" 
                     type="text" 
                     required 
-                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none" 
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none text-zinc-900" 
                     placeholder="12-digit identification number" 
                   />
                 </div>
@@ -106,7 +106,7 @@ export default async function FarmerDashboardPage({ searchParams }: Props) {
                     name="farmLocation" 
                     rows={2} 
                     required 
-                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none" 
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none text-zinc-900" 
                     placeholder="Village, District, State" 
                   />
                 </div>
@@ -119,7 +119,7 @@ export default async function FarmerDashboardPage({ searchParams }: Props) {
                     <input 
                       name="landArea" 
                       required 
-                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none" 
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none text-zinc-900" 
                       placeholder="e.g. 5 Acres" 
                     />
                   </div>
@@ -127,7 +127,7 @@ export default async function FarmerDashboardPage({ searchParams }: Props) {
                     <label className="text-xs font-black text-zinc-400 uppercase tracking-widest ml-1 flex items-center gap-1">
                       <Tag size={12} /> Farming Type
                     </label>
-                    <select name="farmingType" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none appearance-none">
+                    <select name="farmingType" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none appearance-none text-zinc-900">
                       <option value="">Select Category</option>
                       <option value="Vegetables">Vegetables</option>
                       <option value="Fruits">Fruits</option>
@@ -144,7 +144,7 @@ export default async function FarmerDashboardPage({ searchParams }: Props) {
                   <input 
                     name="documentUrl" 
                     type="url" 
-                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none" 
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-emerald-500 transition-all outline-none text-zinc-900" 
                     placeholder="https://..." 
                   />
                   <p className="text-[10px] text-zinc-400 italic">Optional: Provide a link to your land titles or certificates.</p>

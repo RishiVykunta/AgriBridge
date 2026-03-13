@@ -74,7 +74,7 @@ export default async function RetailerDashboardPage({ searchParams }: Props) {
                     name="shopName" 
                     type="text" 
                     required 
-                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none" 
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none text-zinc-900" 
                     placeholder="Official registered name" 
                   />
                 </div>
@@ -86,7 +86,7 @@ export default async function RetailerDashboardPage({ searchParams }: Props) {
                       name="ownerName" 
                       type="text" 
                       required 
-                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none" 
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none text-zinc-900" 
                       placeholder="Proprietor Full Name" 
                     />
                   </div>
@@ -96,7 +96,7 @@ export default async function RetailerDashboardPage({ searchParams }: Props) {
                       name="gstNumber" 
                       type="text" 
                       required 
-                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none" 
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none text-zinc-900" 
                       placeholder="15-digit GST Number" 
                     />
                   </div>
@@ -110,7 +110,7 @@ export default async function RetailerDashboardPage({ searchParams }: Props) {
                     name="shopAddress" 
                     rows={2} 
                     required 
-                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none" 
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none text-zinc-900" 
                     placeholder="Full Business Location" 
                   />
                 </div>
@@ -121,7 +121,7 @@ export default async function RetailerDashboardPage({ searchParams }: Props) {
                     name="contactNumber" 
                     type="tel" 
                     required 
-                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none" 
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none text-zinc-900" 
                     placeholder="Primary Business Contact" 
                   />
                 </div>
@@ -133,7 +133,7 @@ export default async function RetailerDashboardPage({ searchParams }: Props) {
                   <input 
                     name="businessLicenseUrl" 
                     type="url" 
-                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none" 
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:bg-white focus:border-blue-500 transition-all outline-none text-zinc-900" 
                     placeholder="https://..." 
                   />
                   <p className="text-[10px] text-zinc-400 italic">Optional: Public link to your business certificates.</p>
