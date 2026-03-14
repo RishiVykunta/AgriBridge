@@ -21,18 +21,18 @@ export function ProductGallery({ name, media }: ProductGalleryProps) {
     images.find((m) => m.id === activeId) ?? images[0] ?? null;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-10">
       {/* Main image container */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl bg-white shadow-2xl shadow-zinc-200 transition-all duration-500">
+      <div className="relative aspect-[1/1] w-full overflow-hidden rounded-[40px] bg-white shadow-2xl shadow-zinc-200 transition-all duration-700 hover:shadow-emerald-100 ring-1 ring-zinc-100">
         {activeImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={activeImage.url}
             alt={name}
-            className="h-full w-full object-contain p-8 transition-transform duration-700 hover:scale-110 cursor-zoom-in"
+            className="h-full w-full object-contain p-12 transition-transform duration-1000 hover:scale-110 cursor-zoom-in"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-6xl text-zinc-200">
+          <div className="flex h-full items-center justify-center text-8xl text-zinc-100">
             📦
           </div>
         )}

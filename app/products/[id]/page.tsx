@@ -95,60 +95,62 @@ export default async function ProductDetailPage({ params }: Props) {
           </Link>
         </nav>
 
-        <div className="grid gap-12 lg:grid-cols-[1.2fr,1fr] items-start relative">
-          {/* Left: Sticky Image Gallery */}
-          <div className="lg:sticky lg:top-10">
-            <ProductGallery name={product.name} media={product.media as any} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-start relative border-t border-zinc-100">
+          {/* Left: Sticky Image Half - Exactly 50% width on LG */}
+          <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col items-center justify-center bg-zinc-50/50 border-r border-zinc-100 p-8 lg:p-12">
+            <div className="w-full max-w-xl">
+              <ProductGallery name={product.name} media={product.media as any} />
+            </div>
           </div>
 
-          {/* Right: Scrollable Details */}
-          <div className="space-y-10 lg:pl-4">
+          {/* Right: Scrollable Details Half - Exactly 50% width on LG */}
+          <div className="p-8 lg:p-16 lg:py-24 space-y-12">
             {/* Title & Brand */}
             <div>
-              <p className="text-[11px] font-black uppercase tracking-[0.4em] text-emerald-600 flex items-center gap-2 mb-3">
-                 <span className="h-1 w-8 bg-emerald-600 rounded-full" />
+              <p className="text-[11px] font-black uppercase tracking-[0.4em] text-emerald-600 flex items-center gap-3 mb-4">
+                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 shadow-[0_0_10px_rgba(5,150,105,0.5)]" />
                  {product.brand}
               </p>
-              <h1 className="text-3xl lg:text-4xl font-black text-zinc-900 tracking-tight leading-[1.1]">
+              <h1 className="text-3xl lg:text-5xl font-black text-zinc-900 tracking-tight leading-[1.05]">
                 {product.name}
               </h1>
               
               {reviewCount > 0 && averageRating !== null && (
-                <div className="mt-6 flex items-center gap-4">
-                  <div className="flex items-center gap-1 bg-zinc-900 text-white px-3 py-1 rounded-full text-xs font-black">
-                    <span className="text-amber-400">★</span>
+                <div className="mt-8 flex items-center gap-6">
+                  <div className="flex items-center gap-1.5 bg-zinc-900 text-white px-4 py-1.5 rounded-full text-xs font-black">
+                    <span className="text-amber-400 text-sm">★</span>
                     {averageRating.toFixed(1)}
                   </div>
-                  <span className="text-xs font-bold text-zinc-400 border-l border-zinc-200 pl-4">
-                    {reviewCount} Verified Reviews
+                  <span className="text-xs font-bold text-zinc-400 tracking-widest uppercase border-l border-zinc-200 pl-6">
+                    {reviewCount} Reviews
                   </span>
                 </div>
               )}
             </div>
 
-            {/* Pricing Section - Modern & Clean */}
-            <div className="p-8 rounded-[40px] bg-zinc-50 border border-zinc-100/80">
-               <div className="flex items-baseline gap-4 mb-2">
-                  <span className="text-4xl font-black text-zinc-900 tracking-tight">₹{product.price.toString()}</span>
+            {/* Pricing Card - Feature Rich */}
+            <div className="p-10 rounded-[48px] bg-zinc-900 text-white shadow-2xl shadow-zinc-200 relative overflow-hidden group">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl rounded-full -mr-16 -mt-16 group-hover:bg-emerald-500/20 transition-all duration-700" />
+               <div className="flex items-baseline gap-4 mb-3">
+                  <span className="text-5xl font-black tracking-tighter">₹{product.price.toString()}</span>
                   {product.discountPercent && product.discountPercent > 0 && (
-                    <span className="text-xl text-zinc-300 line-through font-bold">
+                    <span className="text-2xl text-zinc-500 line-through font-bold">
                        ₹{Math.round(Number(product.price) / (1 - product.discountPercent / 100)).toString()}
                     </span>
                   )}
                </div>
                
                {product.discountPercent && product.discountPercent > 0 && (
-                 <div className="flex items-center gap-3 mt-4">
-                    <div className="flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20">
+                 <div className="flex items-center gap-4 mt-6">
+                    <div className="flex items-center gap-1.5 bg-emerald-500 text-white px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/30">
                        {product.discountPercent}% OFF
                     </div>
-                    <div className="flex items-center gap-1.5 text-zinc-500 text-xs font-bold">
-                       <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                    <div className="flex items-center gap-1.5 text-emerald-400 text-[11px] font-black uppercase tracking-widest">
                        Save ₹{Math.round(Number(product.price) * (product.discountPercent / 100))}
                     </div>
                  </div>
                )}
-               <p className="mt-6 text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic">Inclusive of all taxes & delivery fees</p>
+               <p className="mt-8 text-[9px] font-black text-zinc-500 uppercase tracking-[0.2em]">Safe Payments · Genuine Products · Fast Delivery</p>
             </div>
 
             {/* Variant Cards - Premium Grid */}
@@ -215,26 +217,26 @@ export default async function ProductDetailPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Sticky Mobile/Bottom Action Bar */}
-        <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white/80 backdrop-blur-xl border-t border-zinc-100 lg:p-6 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
+        {/* Sticky Mobile ONLY Action Bar */}
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-white/80 backdrop-blur-xl border-t border-zinc-100 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
            <div className="mx-auto max-w-7xl flex items-center justify-between gap-4">
-              <div className="hidden sm:flex flex-col">
-                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Grand Total</span>
+              <div className="flex flex-col">
+                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Total</span>
                  <span className="text-xl font-black text-zinc-900">₹{product.price.toString()}</span>
               </div>
-              <div className="flex-1 flex gap-4 max-w-xl ml-auto">
+              <div className="flex-1 flex gap-3 max-w-xs ml-auto">
                  <form action={addToCartAction} className="flex-1">
                    <button
                      type="submit"
-                     className="w-full h-14 rounded-2xl bg-zinc-100 text-zinc-900 text-[10px] font-black uppercase tracking-widest hover:bg-zinc-200 transition-all"
+                     className="w-full h-12 rounded-xl bg-zinc-100 text-zinc-900 text-[10px] font-black uppercase tracking-widest"
                    >
-                     Add to Cart
+                     Add
                    </button>
                  </form>
                  <form action={addToCartAction} className="flex-1">
                    <button
                      type="submit"
-                     className="w-full h-14 rounded-2xl bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-zinc-900 shadow-lg shadow-emerald-500/20 transition-all"
+                     className="w-full h-12 rounded-xl bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20"
                    >
                      Buy Now
                    </button>
