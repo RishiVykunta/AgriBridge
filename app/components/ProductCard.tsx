@@ -189,12 +189,12 @@ export function ProductCard({
   return (
     <article
       onClick={() => router.push(href)}
-      className="cursor-pointer group flex w-44 sm:w-full flex-col rounded-[32px] border border-zinc-200 bg-white overflow-hidden 
+      className="cursor-pointer group flex w-[210px] sm:w-[280px] flex-col rounded-[32px] border border-zinc-200 bg-white overflow-hidden 
       transition-all duration-500 hover:shadow-2xl hover:border-emerald-500/50 hover:-translate-y-1.5"
     >
       {/* IMAGE SECTION */}
       <div
-        className="relative bg-zinc-100 overflow-hidden h-[180px] sm:h-[260px]"
+        className="relative bg-zinc-100 overflow-hidden h-[210px] sm:h-[280px]"
       >
         <div className="block h-full">
           {/* OFFER BADGE */}
