@@ -173,7 +173,7 @@ export default async function ProductDetailPage({ params }: Props) {
               </div>
             )}
 
-            <p className="text-sm text-zinc-700 leading-relaxed">
+            <p className="text-sm text-zinc-700 leading-relaxed whitespace-pre-line">
               {product.description}
             </p>
 

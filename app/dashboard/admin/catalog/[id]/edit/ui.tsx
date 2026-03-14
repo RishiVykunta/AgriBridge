@@ -56,10 +56,9 @@ export function EditProductForm({ product }: { product: EditableProduct }) {
   }, [mainCategory]);
 
   const [imageCount, setImageCount] = useState(Math.max(1, product.imageUrls.length || 1));
-
-  const [packUnit, setPackUnit] = useState("");
   const [packInput, setPackInput] = useState("");
-  const [packSizes, setPackSizes] = useState<string[]>([]);
+  const [packUnit, setPackUnit] = useState("ml");
+  const [packSizes, setPackSizes] = useState<{ value: string; unit: string }[]>([]);
   const existingPackSizes = useMemo(() => readablePackSizes(product.packSizes), [product.packSizes]);
 
   return (
@@ -194,7 +193,7 @@ export function EditProductForm({ product }: { product: EditableProduct }) {
 
         <div>
           <label className="block text-sm font-medium text-zinc-700">
-            Pack sizes (optional)
+            Pack sizes
           </label>
           <div className="mt-1 flex gap-2">
             <input
@@ -203,7 +202,7 @@ export function EditProductForm({ product }: { product: EditableProduct }) {
               step="0.01"
               value={packInput}
               onChange={(e) => setPackInput(e.target.value)}
-              placeholder="e.g. 100"
+              placeholder="Value (e.g. 500)"
               className="w-1/2 rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             />
             <select
@@ -211,7 +210,6 @@ export function EditProductForm({ product }: { product: EditableProduct }) {
               onChange={(e) => setPackUnit(e.target.value)}
               className="w-1/3 rounded-lg border border-zinc-300 px-3 py-2 text-sm bg-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             >
-              <option value="">Unit</option>
               <option value="ml">ml</option>
               <option value="litre">litre</option>
               <option value="gram">gram</option>
@@ -224,7 +222,10 @@ export function EditProductForm({ product }: { product: EditableProduct }) {
               onClick={() => {
                 const trimmed = packInput.trim();
                 if (!trimmed || !packUnit) return;
-                setPackSizes((prev) => (prev.includes(trimmed) ? prev : [...prev, trimmed]));
+                // Add to list if not already present
+                if (!packSizes.some(s => s.value === trimmed && s.unit === packUnit)) {
+                  setPackSizes((prev) => [...prev, { value: trimmed, unit: packUnit }]);
+                }
                 setPackInput("");
               }}
             >
@@ -234,24 +235,24 @@ export function EditProductForm({ product }: { product: EditableProduct }) {
 
           {packSizes.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
-              {packSizes.map((size) => (
+              {packSizes.map((size, idx) => (
                 <button
-                  key={size}
+                  key={`${size.value}-${size.unit}-${idx}`}
                   type="button"
-                  onClick={() => setPackSizes((prev) => prev.filter((v) => v !== size))}
+                  onClick={() => setPackSizes((prev) => prev.filter((_, i) => i !== idx))}
                   className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-100"
                 >
-                  {size} {packUnit || ""}
+                  {size.value} {size.unit}
                   <span className="text-emerald-500">×</span>
                 </button>
               ))}
             </div>
           )}
 
-          {packSizes.map((size) => (
-            <div key={`hidden-${size}`} className="hidden">
-              <input type="hidden" name="quantityValue" value={size} />
-              <input type="hidden" name="quantityUnit" value={packUnit} />
+          {packSizes.map((size, idx) => (
+            <div key={`hidden-${idx}`} className="hidden">
+              <input type="hidden" name="quantityValue" value={size.value} />
+              <input type="hidden" name="quantityUnit" value={size.unit} />
             </div>
           ))}
         </div>
@@ -262,9 +263,10 @@ export function EditProductForm({ product }: { product: EditableProduct }) {
           </label>
           <textarea
             name="description"
-            rows={3}
+            rows={5}
             required
             defaultValue={product.description}
+            placeholder="Detailed description of the product. Support multi-line text and lists..."
             className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
           />
         </div>
