@@ -215,7 +215,11 @@ export function ProductCard({
                  }}
                >
                  {images.map((img, idx) => (
-                   <div key={idx} className="h-full w-full flex-shrink-0">
+                   <div 
+                     key={idx} 
+                     className="h-full flex-shrink-0"
+                     style={{ width: `${100 / (images.length || 1)}%` }}
+                   >
                       <img
                         src={img}
                         alt={`${name} - ${idx + 1}`}
