@@ -99,7 +99,12 @@ export default async function ProductDetailPage({ params }: Props) {
           {/* Left: Sticky Image Half - Exactly 50% width on LG */}
           <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col items-center justify-center bg-zinc-50/50 border-r border-zinc-100 p-8 lg:p-12">
             <div className="w-full max-w-xl">
-              <ProductGallery name={product.name} media={product.media as any} />
+              <ProductGallery 
+                name={product.name} 
+                media={product.media as any} 
+                onWishlist={addToWishlistAction}
+                productUrl={`${process.env.NEXTAUTH_URL || 'https://agri-bridge-jljo.vercel.app'}/products/${product.id}`}
+              />
             </div>
           </div>
 
