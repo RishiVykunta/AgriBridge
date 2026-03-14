@@ -7,9 +7,10 @@ function toNumberSafe(v: unknown): number | null {
   return n;
 }
 
-function getImageUrl(media?: ProductMedia[]): string | undefined {
-  const firstImage = media?.find((m) => m.type === "IMAGE");
-  return firstImage?.url ?? media?.[0]?.url ?? undefined;
+function getAllImageUrls(media?: ProductMedia[]): string[] {
+  return (media ?? [])
+    .filter((m) => m.type === "IMAGE")
+    .map((m) => m.url);
 }
 
 function normalizePricesFromPackSizes(packSizes: unknown, fallbackPrice: number): UiProduct["prices"] {
@@ -68,7 +69,8 @@ export function productToUiProduct(
     cutPrice,
     save,
     discount,
-    image: getImageUrl(p.media),
+    image: getAllImageUrls(p.media)[0],
+    images: getAllImageUrls(p.media),
     availability: p.stock <= 0 ? "out_of_stock" : "in_stock",
     description: p.description,
   };

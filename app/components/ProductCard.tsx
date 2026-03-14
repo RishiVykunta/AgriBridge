@@ -17,6 +17,7 @@ type ProductCardProps = {
   save?: string;
   discount?: string;
   image?: string;
+  images?: string[];
   availability?: "in_stock" | "out_of_stock";
   href?: string;
   description?: string;
@@ -39,6 +40,7 @@ export function ProductCard({
   description,
   productId,
   isLoggedIn,
+  images = [],
 }: ProductCardProps) {
   const router = useRouter();
   const selectedPrice =
@@ -47,6 +49,18 @@ export function ProductCard({
   const [inWishlist, setInWishlist] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Image Slider Logic
+  useEffect(() => {
+    if (!images || images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [images]);
 
   // On initial render, check if this product is already in the wishlist
   useEffect(() => {
@@ -190,18 +204,50 @@ export function ProductCard({
             </span>
           )}
 
-          {/* PRODUCT IMAGE */}
-          {image ? (
-            <img
-              src={image}
-              alt={name}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-4xl text-zinc-300 bg-zinc-50">
-              📦
-            </div>
-          )}
+          {/* PRODUCT IMAGE SLIDER */}
+          <div className="relative h-full w-full overflow-hidden">
+             {images.length > 0 ? (
+               <div 
+                 className="flex h-full transition-transform duration-700 ease-in-out"
+                 style={{ 
+                   width: `${images.length * 100}%`,
+                   transform: `translateX(-${(images.length > 0 ? currentImageIndex : 0) * (100 / (images.length || 1))}%)` 
+                 }}
+               >
+                 {images.map((img, idx) => (
+                   <div key={idx} className="h-full w-full flex-shrink-0">
+                      <img
+                        src={img}
+                        alt={`${name} - ${idx + 1}`}
+                        className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                      />
+                   </div>
+                 ))}
+               </div>
+             ) : image ? (
+               <img
+                 src={image}
+                 alt={name}
+                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+               />
+             ) : (
+               <div className="flex h-full items-center justify-center text-4xl text-zinc-300 bg-zinc-50">
+                 📦
+               </div>
+             )}
+
+             {/* SLIDER DOTS */}
+             {images.length > 1 && (
+               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                 {images.map((_, idx) => (
+                   <div 
+                     key={idx} 
+                     className={`h-1 rounded-full transition-all duration-300 ${idx === currentImageIndex ? 'w-4 bg-emerald-500' : 'w-1 bg-white/50'}`} 
+                   />
+                 ))}
+               </div>
+             )}
+          </div>
         </div>
 
         {/* WISHLIST BUTTON */}

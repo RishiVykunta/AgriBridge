@@ -14,6 +14,7 @@ export type Product = {
   save?: string;
   discount?: string;
   image?: string;
+  images?: string[];
   availability?: "in_stock" | "out_of_stock";
   description?: string;
   /** Optional product details href. Defaults to "#" */
@@ -73,6 +74,7 @@ export default function ProductSection({
                 save={p.save}
                 discount={p.discount}
                 image={p.image}
+                images={p.images}
                 availability={p.availability}
                 description={p.description}
                 href={p.href}
