@@ -49,20 +49,26 @@ export default async function AdminDashboardPage() {
   ];
 
   const colorMap = {
-    emerald: "from-emerald-50 to-emerald-100 hover:border-emerald-500/40 text-emerald-700 bg-emerald-50/50",
-    amber: "from-amber-50 to-amber-100 hover:border-amber-500/40 text-amber-700 bg-amber-50/50",
-    indigo: "from-indigo-50 to-indigo-100 hover:border-indigo-500/40 text-indigo-700 bg-indigo-50/50",
-    blue: "bg-blue-50/50 border-blue-100 hover:border-blue-400 text-blue-700",
-    rose: "bg-rose-50/50 border-rose-100 hover:border-rose-400 text-rose-700",
-    violet: "bg-violet-50/50 border-violet-100 hover:border-violet-400 text-violet-700",
-    slate: "bg-slate-50/50 border-slate-100 hover:border-slate-400 text-slate-700",
+    emerald: "border-emerald-100/80 hover:border-emerald-500/50 bg-emerald-50/30 text-emerald-700",
+    amber: "border-amber-100/80 hover:border-amber-500/50 bg-amber-50/30 text-amber-700",
+    indigo: "border-indigo-100/80 hover:border-indigo-500/50 bg-indigo-50/30 text-indigo-700",
+    blue: "border-blue-100/80 hover:border-blue-400 bg-blue-50/30 text-blue-700",
+    rose: "border-rose-100/80 hover:border-rose-400 bg-rose-50/30 text-rose-700",
+    violet: "border-violet-100/80 hover:border-violet-400 bg-violet-50/30 text-violet-700",
+    slate: "border-slate-100/80 hover:border-slate-400 bg-slate-50/30 text-slate-700",
+  };
+
+  const iconBgMap = {
+    emerald: "bg-emerald-100 text-emerald-600 shadow-emerald-100",
+    amber: "bg-amber-100 text-amber-600 shadow-amber-100",
+    indigo: "bg-indigo-100 text-indigo-600 shadow-indigo-100",
   };
 
   return (
     <div className="min-h-screen bg-[#fcfcfc] relative overflow-hidden">
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-emerald-50 rounded-full blur-[120px] opacity-60 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-50 rounded-full blur-[100px] opacity-40 pointer-events-none" />
+      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-emerald-50/50 rounded-full blur-[120px] opacity-60 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-50/50 rounded-full blur-[100px] opacity-40 pointer-events-none" />
 
       <div className="relative z-10 p-8 md:p-12 max-w-7xl mx-auto">
         {/* Header Section */}
@@ -110,32 +116,46 @@ export default async function AdminDashboardPage() {
             <Link
               key={card.title}
               href={card.href}
-              className={`group relative overflow-hidden rounded-[40px] border border-zinc-200 bg-white p-10 shadow-sm transition-all hover:shadow-2xl hover:-translate-y-2 ${colorMap[card.color as keyof typeof colorMap].split(' ').slice(0, 3).join(' ')}`}
+              className={`group relative overflow-hidden rounded-[48px] p-[2px] transition-all hover:scale-[1.02] active:scale-[0.98]
+                ${card.color === 'emerald' ? 'bg-gradient-to-br from-emerald-200 via-emerald-100 to-transparent hover:from-emerald-400' : ''}
+                ${card.color === 'amber' ? 'bg-gradient-to-br from-amber-200 via-amber-100 to-transparent hover:from-amber-400' : ''}
+                ${card.color === 'indigo' ? 'bg-gradient-to-br from-indigo-200 via-indigo-100 to-transparent hover:from-indigo-400' : ''}
+              `}
             >
-              <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:scale-150 transition-transform duration-1000 grayscale">
-                {card.icon}
-              </div>
+              <div className="h-full w-full bg-white rounded-[46px] p-10 relative overflow-hidden transition-all group-hover:bg-opacity-90">
+                <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:scale-150 transition-transform duration-1000 grayscale pointer-events-none">
+                  {card.icon}
+                </div>
 
-              <div className="flex items-start justify-between mb-20 relative z-10">
-                 <div className={`h-16 w-16 rounded-3xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 shadow-lg ${colorMap[card.color as keyof typeof colorMap].split(' ').pop()} ${colorMap[card.color as keyof typeof colorMap].split(' ').slice(-2, -1)[0]}`}>
-                    {card.icon}
-                 </div>
-                 {card.count !== undefined && card.count > 0 && (
-                    <div className="flex items-center gap-2 bg-zinc-900 text-white px-4 py-1.5 rounded-2xl text-[11px] font-black tracking-widest shadow-lg">
-                       <svg className="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
-                       {card.count} NEW
-                    </div>
-                 )}
-              </div>
-              
-              <div className="relative z-10">
-                 <h2 className="text-3xl font-black text-zinc-900 tracking-tight mb-3 group-hover:translate-x-1 transition-transform">{card.title}</h2>
-                 <p className="text-zinc-500 font-medium leading-relaxed text-base group-hover:text-zinc-600">{card.desc}</p>
-              </div>
-              
-              <div className="mt-8 flex items-center gap-2 text-sm font-black uppercase tracking-widest opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
-                <span>View Console</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                <div className="flex items-start justify-between mb-20 relative z-10">
+                   <div className={`h-16 w-16 rounded-3xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 shadow-xl shadow-opacity-20 ${iconBgMap[card.color as keyof typeof iconBgMap]}`}>
+                      {card.icon}
+                   </div>
+                   {card.count !== undefined && card.count > 0 && (
+                      <div className="flex items-center gap-2 bg-zinc-900 text-white px-4 py-1.5 rounded-2xl text-[11px] font-black tracking-widest shadow-lg">
+                         <svg className="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
+                         {card.count} NEW
+                      </div>
+                   )}
+                </div>
+                
+                <div className="relative z-10">
+                   <h2 className="text-3xl font-black text-zinc-900 tracking-tight mb-3 group-hover:translate-x-1 transition-transform">{card.title}</h2>
+                   <p className="text-zinc-500 font-medium leading-relaxed text-base group-hover:text-zinc-600">{card.desc}</p>
+                </div>
+                
+                <div className="mt-8 flex items-center gap-2 text-sm font-black uppercase tracking-widest opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
+                  <span className={`
+                    ${card.color === 'emerald' ? 'text-emerald-600' : ''}
+                    ${card.color === 'amber' ? 'text-amber-600' : ''}
+                    ${card.color === 'indigo' ? 'text-indigo-600' : ''}
+                  `}>View Console</span>
+                  <svg className={`w-5 h-5 
+                    ${card.color === 'emerald' ? 'text-emerald-500' : ''}
+                    ${card.color === 'amber' ? 'text-amber-500' : ''}
+                    ${card.color === 'indigo' ? 'text-indigo-500' : ''}
+                  `} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </div>
               </div>
             </Link>
           ))}
@@ -145,7 +165,7 @@ export default async function AdminDashboardPage() {
         <div className="mt-24 pt-12 border-t border-zinc-100">
            <div className="flex items-center gap-4 mb-10">
              <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-zinc-400">System Modules</h3>
-             <div className="h-px bg-zinc-100 flex-1" />
+             <div className="h-px bg-gradient-to-r from-zinc-200 to-transparent flex-1" />
            </div>
            
            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -153,19 +173,26 @@ export default async function AdminDashboardPage() {
                  <Link 
                    key={link.title} 
                    href={link.href}
-                   className={`flex items-center justify-between p-7 rounded-[24px] bg-white border border-zinc-100 shadow-sm transition-all group hover:scale-[1.02] hover:shadow-lg ${colorMap[link.color as keyof typeof colorMap]}`}
+                   className={`flex items-center justify-between p-[1px] rounded-[24px] transition-all group hover:scale-[1.02] hover:shadow-xl
+                     ${link.color === 'blue' ? 'bg-gradient-to-br from-blue-200 to-transparent hover:from-blue-400' : ''}
+                     ${link.color === 'rose' ? 'bg-gradient-to-br from-rose-200 to-transparent hover:from-rose-400' : ''}
+                     ${link.color === 'violet' ? 'bg-gradient-to-br from-violet-200 to-transparent hover:from-violet-400' : ''}
+                     ${link.color === 'slate' ? 'bg-gradient-to-br from-slate-200 to-transparent hover:from-slate-400' : ''}
+                   `}
                  >
-                    <div className="flex items-center gap-3">
-                       <span className="text-[11px] font-black text-zinc-600 group-hover:text-inherit transition-colors uppercase tracking-[0.2em]">{link.title}</span>
-                       {(link as any).count > 0 && (
-                          <div className="flex items-center gap-1.5 bg-zinc-900 text-white px-2.5 py-1 rounded-full text-[9px] font-black">
-                             <svg className="w-2.5 h-2.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
-                             {(link as any).count}
-                          </div>
-                       )}
-                    </div>
-                    <div className="h-8 w-8 rounded-xl bg-zinc-50 flex items-center justify-center text-zinc-300 group-hover:bg-current group-hover:text-white transition-all transform group-hover:rotate-45">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    <div className="flex items-center justify-between w-full h-full bg-white rounded-[23px] p-7 transition-all group-hover:bg-opacity-95">
+                      <div className="flex items-center gap-3">
+                         <span className="text-[11px] font-black text-zinc-600 group-hover:text-inherit transition-colors uppercase tracking-[0.2em]">{link.title}</span>
+                         {(link as any).count > 0 && (
+                            <div className="flex items-center gap-1.5 bg-zinc-900 text-white px-2.5 py-1 rounded-full text-[9px] font-black">
+                               <svg className="w-2.5 h-2.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
+                               {(link as any).count}
+                            </div>
+                         )}
+                      </div>
+                      <div className="h-8 w-8 rounded-xl bg-zinc-50 flex items-center justify-center text-zinc-300 group-hover:bg-zinc-900 group-hover:text-white transition-all transform group-hover:rotate-45">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                      </div>
                     </div>
                  </Link>
               ))}
