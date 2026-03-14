@@ -24,7 +24,7 @@ export default async function SignupPage({ searchParams }: Props) {
           <Link href="/login" className="group flex items-center gap-1 text-sm font-medium text-emerald-700 hover:text-emerald-800 transition-colors">
             Log in
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-0.5">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
             </svg>
           </Link>
         </div>
@@ -42,7 +42,7 @@ export default async function SignupPage({ searchParams }: Props) {
           {error && (
             <div className="mb-6 rounded-xl bg-red-50/50 border border-red-100 px-4 py-3 text-sm text-red-700 backdrop-blur-sm">
               <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
                 {error}
               </div>
             </div>
@@ -51,15 +51,16 @@ export default async function SignupPage({ searchParams }: Props) {
           <form action={signup} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-semibold text-zinc-700 mb-1.5 ml-0.5">
-                Full Name <span className="text-zinc-400 font-normal">(optional)</span>
+                Full Name
               </label>
               <input
                 id="name"
                 name="name"
                 type="text"
+                required
                 autoComplete="name"
                 className="w-full rounded-xl border border-zinc-200 bg-white/50 px-4 py-3 text-zinc-900 transition-all focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-500/10"
-                placeholder="John Doe"
+                placeholder="Name"
               />
             </div>
             <div>
@@ -75,7 +76,7 @@ export default async function SignupPage({ searchParams }: Props) {
                 pattern="[6-9]\d{9}"
                 title="Please enter a valid 10-digit Indian mobile number."
                 className="w-full rounded-xl border border-zinc-200 bg-white/50 px-4 py-3 text-zinc-900 transition-all focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-500/10"
-                placeholder="9876543210"
+                placeholder=" mobie number "
               />
             </div>
             <div>
