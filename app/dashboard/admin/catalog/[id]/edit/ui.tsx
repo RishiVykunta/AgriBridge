@@ -203,7 +203,7 @@ export function EditProductForm({ product }: { product: EditableProduct }) {
               value={packInput}
               onChange={(e) => setPackInput(e.target.value)}
               placeholder="Value (e.g. 500)"
-              className="w-1/2 rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="w-1/2 rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             />
             <select
               value={packUnit}
@@ -267,7 +267,7 @@ export function EditProductForm({ product }: { product: EditableProduct }) {
             required
             defaultValue={product.description}
             placeholder="Detailed description of the product. Support multi-line text and lists..."
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
           />
         </div>
 
