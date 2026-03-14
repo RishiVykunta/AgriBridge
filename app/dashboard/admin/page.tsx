@@ -144,13 +144,13 @@ export default async function AdminDashboardPage() {
                    <p className="text-zinc-500 font-medium leading-relaxed text-base group-hover:text-zinc-600">{card.desc}</p>
                 </div>
                 
-                <div className="mt-8 flex items-center gap-2 text-sm font-black uppercase tracking-widest opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
+                <div className="mt-8 flex items-center gap-2 text-sm font-black uppercase tracking-widest transition-all duration-500">
                   <span className={`
                     ${card.color === 'emerald' ? 'text-emerald-600' : ''}
                     ${card.color === 'amber' ? 'text-amber-600' : ''}
                     ${card.color === 'indigo' ? 'text-indigo-600' : ''}
                   `}>View Console</span>
-                  <svg className={`w-5 h-5 
+                  <svg className={`w-5 h-5 group-hover:translate-x-1 transition-transform
                     ${card.color === 'emerald' ? 'text-emerald-500' : ''}
                     ${card.color === 'amber' ? 'text-amber-500' : ''}
                     ${card.color === 'indigo' ? 'text-indigo-500' : ''}
@@ -180,9 +180,9 @@ export default async function AdminDashboardPage() {
                      ${link.color === 'slate' ? 'bg-gradient-to-br from-slate-200 to-transparent hover:from-slate-400' : ''}
                    `}
                  >
-                    <div className="flex items-center justify-between w-full h-full bg-white rounded-[23px] p-7 transition-all group-hover:bg-opacity-95">
+                    <div className="flex items-center justify-between w-full h-full bg-white rounded-[23px] p-7 transition-all">
                       <div className="flex items-center gap-3">
-                         <span className="text-[11px] font-black text-zinc-600 group-hover:text-inherit transition-colors uppercase tracking-[0.2em]">{link.title}</span>
+                         <span className="text-[11px] font-black text-zinc-900 transition-colors uppercase tracking-[0.2em]">{link.title}</span>
                          {(link as any).count > 0 && (
                             <div className="flex items-center gap-1.5 bg-zinc-900 text-white px-2.5 py-1 rounded-full text-[9px] font-black">
                                <svg className="w-2.5 h-2.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
